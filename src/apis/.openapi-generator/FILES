@@ -1,0 +1,17 @@
+.openapi-generator-ignore
+apis/AuthApi.ts
+apis/GamePicksApi.ts
+apis/GamesApi.ts
+apis/MiscApi.ts
+apis/TeamsApi.ts
+apis/UsersApi.ts
+apis/index.ts
+index.ts
+models/AuthData.ts
+models/AuthResult.ts
+models/Game.ts
+models/GamePick.ts
+models/Team.ts
+models/User.ts
+models/index.ts
+runtime.ts

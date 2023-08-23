@@ -1,0 +1,90 @@
+import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
+import React, { createContext, useContext, useEffect } from 'react';
+
+import { AuthResult } from '../apis/models/AuthResult';
+import { useLogin } from '../hooks/auth/useLogin';
+import { RegisterData, useRegister } from '../hooks/auth/useRegister';
+
+export type AuthContextData = {
+  signIn: (username: string, password: string) => Promise<boolean>;
+  signOut: () => void;
+  register: (registerData: RegisterData) => Promise<boolean>;
+  authData: string;
+  errorMessage: string;
+}
+
+const AuthContext = createContext<AuthContextData>(null);
+
+// This hook can be used to access the user info.
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
+// This hook will protect the route access based on user authentication.
+function useProtectedRoute(auth) {
+  const router = useRouter();
+  const segments = useSegments();
+  const navigationState = useRootNavigationState();
+
+  useEffect(() => {
+    if (!navigationState?.key) return;
+
+    const inAuthGroup = segments[0] === "auth";
+
+    // This structure may differ from other implementations. 
+    if (auth && segments.length === 0) {
+      router.push("/(home)/home");
+      return;
+    } else if (!auth && segments.length === 0) {
+      router.push("auth/sign-in");
+      return;
+    } else if (!auth && !inAuthGroup) {
+      router.push("auth/sign-in");
+      return;
+    } else if (auth && inAuthGroup) {
+      router.replace("/(home)/home");
+      return;
+    }
+  }, [auth, segments, navigationState]);
+}
+
+export function Provider(props) {
+  const [authData, setAuth] = React.useState(null);
+  const [errorMessage, setErrorMessage] = React.useState(null);
+
+  const handleLogin = async (username: string, password: string): Promise<boolean> => {
+    const result = await useLogin(username, password);
+    return handleAuthResult(result);
+  }
+
+  const handleRegister = async (registerData: RegisterData): Promise<boolean> => {
+    const result = await useRegister(registerData);
+    return handleAuthResult(result);
+  }
+
+  const handleAuthResult = (result: AuthResult): boolean => {
+    if (result?.success) {
+      setAuth(result.data.token);
+      setErrorMessage(null);
+    } else {
+      setAuth(null);
+      setErrorMessage(result.message);
+    }
+    return result?.success;
+  } 
+
+  useProtectedRoute(authData);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        signIn: (username: string, password: string) => handleLogin(username, password),
+        signOut: () => setAuth(null),
+        register: (registerData: RegisterData) => handleRegister(registerData),
+        authData,
+        errorMessage
+      }}>
+      {props.children}
+    </AuthContext.Provider>
+  );
+}

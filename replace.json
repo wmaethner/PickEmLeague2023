@@ -1,0 +1,5 @@
+{
+  "files": ["./src/apis/**"],
+  "from": "/useForm = false/g",
+  "to": "useForm = canConsumeForm"
+}
