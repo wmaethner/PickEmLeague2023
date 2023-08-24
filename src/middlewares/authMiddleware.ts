@@ -10,7 +10,7 @@ export class AuthMiddleware implements Middleware {
         ...context.init,
         headers: new Headers({
           ...context.init.headers,
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `${accessToken}`,
         }),
       },
     };
@@ -28,10 +28,5 @@ export class AuthMiddleware implements Middleware {
       console.log(err);
       return '';
     }
-    // return Promise.resolve().then(() => {
-    //   return 'ACCESS_TOKEN';
-    // });
   }
-
-
 }

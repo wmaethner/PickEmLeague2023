@@ -20,11 +20,12 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSAppTransportSecurity": {
-          "NSExceptionDomains": {
-            "PickEmLeague2023-env.eba-8mjsx79p.us-east-1.elasticbeanstalk.com": {
-              "NSTemporaryExceptionAllowsInsecureHTTPLoads": true
-            }
-          }
+          "NSAllowsArbitraryLoads": true
+          // "NSExceptionDomains": {
+          //   "PickEmLeague2023-env.eba-8mjsx79p.us-east-1.elasticbeanstalk.com": {
+          //     "NSTemporaryExceptionAllowsInsecureHTTPLoads": true
+          //   }
+          // }
         }
       }
     },

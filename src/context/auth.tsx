@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect } from 'react';
 import { AuthResult } from '../apis/models/AuthResult';
 import { useLogin } from '../hooks/auth/useLogin';
 import { RegisterData, useRegister } from '../hooks/auth/useRegister';
+import { useLogging } from './logging';
 
 export type AuthContextData = {
   signIn: (username: string, password: string) => Promise<boolean>;
@@ -48,12 +49,15 @@ function useProtectedRoute(auth) {
   }, [auth, segments, navigationState]);
 }
 
-export function Provider(props) {
+export function AuthProvider(props) {
   const [authData, setAuth] = React.useState(null);
   const [errorMessage, setErrorMessage] = React.useState(null);
+  const {addLog} = useLogging();
 
   const handleLogin = async (username: string, password: string): Promise<boolean> => {
+    await addLog(`Auth provider handle login ${username} - ${password}`);
     const result = await useLogin(username, password);
+    await addLog(`Auth provider handle login result ${result.success}`);
     return handleAuthResult(result);
   }
 

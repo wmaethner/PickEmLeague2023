@@ -1,6 +1,5 @@
 import { BaseAPI, Configuration } from "../apis";
 import { AuthMiddleware } from "../middlewares/authMiddleware";
-import storage from "../utils/storage";
 
 type ApiConstructor<T extends BaseAPI> = new (config: Configuration) => T;
 
@@ -18,14 +17,4 @@ export default async function useApi<T extends BaseAPI>(api: ApiConstructor<T>) 
       middleware: [new AuthMiddleware()]
     })
   );
-}
-
-async function bearerToken(): Promise<string | PromiseLike<string>> {
-  try {
-    const token = await storage.load({ key: 'bearerToken '});
-    return `Bearer ${token}`;
-  } catch (err) {
-    console.log(err);
-    return '';
-  }
 }
