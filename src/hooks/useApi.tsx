@@ -4,6 +4,7 @@ import { AuthMiddleware } from "../middlewares/authMiddleware";
 type ApiConstructor<T extends BaseAPI> = new (config: Configuration) => T;
 
 export default async function useApi<T extends BaseAPI>(api: ApiConstructor<T>) {
+  // const {authData} = useAuth();
   // const token = getToken();
   return new api(
     new Configuration({
@@ -12,9 +13,16 @@ export default async function useApi<T extends BaseAPI>(api: ApiConstructor<T>) 
       // basePath: "http://127.0.0.1:5000/api",
       // headers: {
       //   // 'Authorization': 'Bearer ' + storage.load({ key: 'bearerToken' })
-      //   'Authorization': await bearerToken()
+      //   // 'Authorization': await bearerToken()
+      //   'Authorization': `Bearer ${authData}`
       // },
       middleware: [new AuthMiddleware()]
     })
   );
 }
+
+// const AuthHeader = (): string => {
+//   const {authData} = useAuth();
+//   console.log(`Auth header: ${authData}`);
+//   return (authData ? `Bearer ${authData}` : '');
+// }

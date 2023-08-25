@@ -4,7 +4,7 @@
     "slug": "PickEmLeague2023_Mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app-icon.png",
     "userInterfaceStyle": "light",
     "scheme": "pickemleague2023-mobile",
     "splash": {
@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "pickemleague2023",
+      "bundleIdentifier": "pickemleague2023ios",
+      "buildNumber": "4",
       "supportsTablet": true,
       "infoPlist": {
         "NSAppTransportSecurity": {
@@ -31,7 +32,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        // "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.wmaethner.PickEmLeague2023_Mobile"

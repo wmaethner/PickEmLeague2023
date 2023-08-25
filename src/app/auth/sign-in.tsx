@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
+import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import { useAuth } from '../../context/auth';
 import { useLogging } from '../../context/logging';
 import { styles } from '../../utils/styles';
@@ -28,20 +28,11 @@ export default function SignIn() {
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
       {
         errorMessage &&
-        <Text>{errorMessage}</Text>
+        <Text style={[styles.label, { backgroundColor: 'red' }]}>{errorMessage}</Text>
       }
-      <Pressable style={styles.button} onPress={handleClear}>
-        <Text style={styles.text}>Clear Logs</Text>
-      </Pressable>
-      <ScrollView>
-        {logs.map((log, index) => (
-          <Text key={index}>
-            {log}
-          </Text>
-        ))}
-      </ScrollView>
+      <Text style={styles.title}>Pick Em League 2023</Text>
       <View style={styles.container}>
-        <Text style={{ flex: 2, textAlign: 'center' }}>Username:</Text>
+        <Text style={styles.label}>Username:</Text>
         <TextInput
           style={[styles.input, { flex: 4 }]}
           onChangeText={setUsername}
@@ -51,7 +42,7 @@ export default function SignIn() {
         />
       </View>
       <View style={styles.container}>
-        <Text style={{ flex: 2, textAlign: 'center' }}>Password:</Text>
+        <Text style={styles.label}>Password:</Text>
         <TextInput
           style={[styles.input, { flex: 4 }]}
           onChangeText={setpassword}

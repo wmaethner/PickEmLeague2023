@@ -31,6 +31,12 @@ export interface User {
      * @memberof User
      */
     admin?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    token?: string;
 }
 
 /**
@@ -54,6 +60,7 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         
         'email': !exists(json, 'email') ? undefined : json['email'],
         'admin': !exists(json, 'admin') ? undefined : json['admin'],
+        'token': !exists(json, 'token') ? undefined : json['token'],
     };
 }
 
@@ -68,6 +75,7 @@ export function UserToJSON(value?: User | null): any {
         
         'email': value.email,
         'admin': value.admin,
+        'token': value.token,
     };
 }
 

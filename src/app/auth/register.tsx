@@ -15,13 +15,13 @@ export default function Register() {
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
       <ScrollView>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center', padding: 10 }}>Registration</Text>
         {
           errorMessage &&
           <Text>{errorMessage}</Text>
         }
+        <Text style={styles.title}>Registration</Text>
         <View style={styles.container}>
-          <Text style={{ flex: 2, textAlign: 'center' }}>First Name:</Text>
+          <Text style={styles.label}>First Name:</Text>
           <TextInput
             style={[styles.input, { flex: 4 }]}
             onChangeText={setFirst}
@@ -29,7 +29,7 @@ export default function Register() {
           />
         </View>
         <View style={styles.container}>
-          <Text style={{ flex: 2, textAlign: 'center' }}>Last Name:</Text>
+          <Text style={styles.label}>Last Name:</Text>
           <TextInput
             style={[styles.input, { flex: 4 }]}
             onChangeText={setLast}
@@ -37,7 +37,7 @@ export default function Register() {
           />
         </View>
         <View style={styles.container}>
-          <Text style={{ flex: 2, textAlign: 'center' }}>Email:</Text>
+          <Text style={styles.label}>Email:</Text>
           <TextInput
             style={[styles.input, { flex: 4 }]}
             onChangeText={setEmail}
@@ -46,7 +46,7 @@ export default function Register() {
           />
         </View>
         <View style={styles.container}>
-          <Text style={{ flex: 2, textAlign: 'center' }}>Username:</Text>
+          <Text style={styles.label}>Username:</Text>
           <TextInput
             style={[styles.input, { flex: 4 }]}
             onChangeText={setUsername}
@@ -56,7 +56,7 @@ export default function Register() {
           />
         </View>
         <View style={styles.container}>
-          <Text style={{ flex: 2, textAlign: 'center' }}>Password:</Text>
+          <Text style={styles.label}>Password:</Text>
           <TextInput
             style={[styles.input, { flex: 4 }]}
             onChangeText={setpassword}

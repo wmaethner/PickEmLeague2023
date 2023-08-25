@@ -14,7 +14,9 @@
     "clear-api": "rimraf ./src/apis",
     "generate": "openapi-generator-cli generate -i openapi.json -o ./src/apis --generator-name typescript-fetch",
     "replace": "replace-in-file --configFile=./replace.json --isRegex",
-    "deploy": "eb deploy --profile personal"
+    "build": "eas build --platform all",
+    "build-ios": "eas build --platform ios",
+    "submit-ios": "eas submit -p ios"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.18.2",

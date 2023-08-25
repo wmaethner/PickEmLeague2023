@@ -11,6 +11,8 @@ models/AuthData.ts
 models/AuthResult.ts
 models/Game.ts
 models/GamePick.ts
+models/MiscData.ts
+models/MiscResult.ts
 models/Team.ts
 models/User.ts
 models/index.ts

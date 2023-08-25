@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect } from 'react';
 import { AuthResult } from '../apis/models/AuthResult';
 import { useLogin } from '../hooks/auth/useLogin';
 import { RegisterData, useRegister } from '../hooks/auth/useRegister';
+import storage from '../utils/storage';
 import { useLogging } from './logging';
 
 export type AuthContextData = {
@@ -52,7 +53,7 @@ function useProtectedRoute(auth) {
 export function AuthProvider(props) {
   const [authData, setAuth] = React.useState(null);
   const [errorMessage, setErrorMessage] = React.useState(null);
-  const {addLog} = useLogging();
+  const { addLog } = useLogging();
 
   const handleLogin = async (username: string, password: string): Promise<boolean> => {
     await addLog(`Auth provider handle login ${username} - ${password}`);
@@ -63,19 +64,20 @@ export function AuthProvider(props) {
 
   const handleRegister = async (registerData: RegisterData): Promise<boolean> => {
     const result = await useRegister(registerData);
-    return handleAuthResult(result);
+    return await handleAuthResult(result);
   }
 
-  const handleAuthResult = (result: AuthResult): boolean => {
+  const handleAuthResult = async (result: AuthResult): Promise<boolean> => {
     if (result?.success) {
       setAuth(result.data.token);
+      await storage.save({ key: 'bearerToken', data: result.data.token })
       setErrorMessage(null);
     } else {
       setAuth(null);
       setErrorMessage(result.message);
     }
     return result?.success;
-  } 
+  }
 
   useProtectedRoute(authData);
 
