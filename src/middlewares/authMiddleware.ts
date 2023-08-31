@@ -5,14 +5,14 @@ export class AuthMiddleware implements Middleware {
   
 
   public async pre(context: ResponseContext): Promise<FetchParams | void> {
-    const accessToken = this.acquireToken();
+    // console.log(context.url);
     return {
       url: context.url,
       init: {
         ...context.init,
         headers: new Headers({
           ...context.init.headers,
-          Authorization: `${accessToken}`,
+          Authorization: `${await this.acquireToken()}`,
         }),
       },
     };
@@ -23,12 +23,8 @@ export class AuthMiddleware implements Middleware {
   }
 
   private async acquireToken(): Promise<string> {
-    // const { authData } = useAuth();
-    // console.log(`Acquire token ${authData}`);
-    // return authData;
     try {
       const token = await storage.load({ key: 'bearerToken'});
-      console.log(`Acquire token ${token}`);
       return `Bearer ${token}`;
     } catch (err) {
       console.log(`Acquire token error ${err}`);

@@ -1,49 +1,53 @@
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
-
-import { useEffect } from 'react';
-import { useAuth } from '../../context/auth';
-import { useLogging } from '../../context/logging';
-import { useGetCurrentUser } from '../../hooks/useGetCurrentUser';
+import { useEffect, useState } from 'react';
+import { Dimensions, SafeAreaView, ScrollView, View } from 'react-native';
+import { Row, Table } from 'react-native-reanimated-table';
+import { UserData } from '../../apis/models/UserData';
+import { useGetUsers } from '../../hooks/useGetUsers';
 import { styles } from '../../utils/styles';
 
 export default function Home() {
-  const { signOut, authData } = useAuth();
-  const { logs, addLog, clearLogs } = useLogging();
+  const [users, setUsers] = useState<UserData[]>([]);
 
   useEffect(() => {
-    async function GetUser() {
-      console.log("Get user");
-      try {
-        const result = await useGetCurrentUser();
-        console.log(result.token.toString());
-      } catch (err) {
-        console.log(`Get user error ${err}`);
-      }
+    async function GetUsers() {
+      setUsers(await useGetUsers());
     }
-    
-    console.log("HOME");
-    GetUser();
-  }, []);
 
-  const handleLogout = async () => {
-    await signOut();
+    GetUsers();
+  }, [])
+
+  const header = () => [
+    'Username', 'Score', 'Picks Correct'
+  ]
+
+  const widths = () => {
+    const windowWidth = Dimensions.get('window').width;
+    return [windowWidth * .6, windowWidth * .2, windowWidth * .2]
   }
 
+  const mapUser = (user: UserData) => [user.username, 5, 1]
+
   return (
-    <SafeAreaView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-      <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={styles.title}>
-          Welcome to the 2023 season!
-        </Text>
-        <Text style={styles.title}>
-          Come back soon...
-        </Text>
-      </View>
-      <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
-        <Pressable style={styles.button} onPress={handleLogout}>
-          <Text style={styles.text}>Sign Out</Text>
-        </Pressable>
-      </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView horizontal={true}>
+        <View>
+          <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+            <Row data={header()} widthArr={widths()} />
+          </Table>
+          <ScrollView style={{ marginTop: -1 }}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+              {users.map((user, index) => (
+                <Row 
+                  key={index}
+                  data={mapUser(user)}
+                  widthArr={widths()}
+                  
+                />
+              ))}
+            </Table>
+          </ScrollView>
+        </View>
+      </ScrollView>
     </SafeAreaView>
-  );
+  )
 }

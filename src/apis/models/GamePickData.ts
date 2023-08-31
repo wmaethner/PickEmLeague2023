@@ -16,49 +16,49 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface GamePick
+ * @interface GamePickData
  */
-export interface GamePick {
+export interface GamePickData {
     /**
      * 
      * @type {number}
-     * @memberof GamePick
+     * @memberof GamePickData
      */
     userId?: number;
     /**
      * 
      * @type {number}
-     * @memberof GamePick
+     * @memberof GamePickData
      */
     gameId?: number;
     /**
      * 
      * @type {string}
-     * @memberof GamePick
+     * @memberof GamePickData
      */
     pick?: string;
     /**
      * 
      * @type {number}
-     * @memberof GamePick
+     * @memberof GamePickData
      */
     amount?: number;
 }
 
 /**
- * Check if a given object implements the GamePick interface.
+ * Check if a given object implements the GamePickData interface.
  */
-export function instanceOfGamePick(value: object): boolean {
+export function instanceOfGamePickData(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function GamePickFromJSON(json: any): GamePick {
-    return GamePickFromJSONTyped(json, false);
+export function GamePickDataFromJSON(json: any): GamePickData {
+    return GamePickDataFromJSONTyped(json, false);
 }
 
-export function GamePickFromJSONTyped(json: any, ignoreDiscriminator: boolean): GamePick {
+export function GamePickDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): GamePickData {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -71,7 +71,7 @@ export function GamePickFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     };
 }
 
-export function GamePickToJSON(value?: GamePick | null): any {
+export function GamePickDataToJSON(value?: GamePickData | null): any {
     if (value === undefined) {
         return undefined;
     }

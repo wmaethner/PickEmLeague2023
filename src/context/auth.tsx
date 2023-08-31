@@ -1,17 +1,19 @@
 import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { AuthResult } from '../apis/models/AuthResult';
 import { useLogin } from '../hooks/auth/useLogin';
 import { RegisterData, useRegister } from '../hooks/auth/useRegister';
 import storage from '../utils/storage';
 import { useLogging } from './logging';
+import { useUser } from './user';
 
 export type AuthContextData = {
   signIn: (username: string, password: string) => Promise<boolean>;
   signOut: () => void;
   register: (registerData: RegisterData) => Promise<boolean>;
-  authData: string;
+  loggedIn: boolean;
+  // authData: string;
   errorMessage: string;
 }
 
@@ -23,43 +25,68 @@ export function useAuth() {
 }
 
 // This hook will protect the route access based on user authentication.
-function useProtectedRoute(auth) {
+function useProtectedRoute(loggedIn: boolean) {
   const router = useRouter();
   const segments = useSegments();
   const navigationState = useRootNavigationState();
+  const { UserData } = useUser();
 
   useEffect(() => {
     if (!navigationState?.key) return;
 
     const inAuthGroup = segments[0] === "auth";
+    const ready = (UserData && loggedIn);
+    console.log(`Ready ${ready}`);
 
     // This structure may differ from other implementations. 
-    if (auth && segments.length === 0) {
+    if (ready && segments.length === 0) {
       router.push("/(home)/home");
       return;
-    } else if (!auth && segments.length === 0) {
+    } else if (!ready && segments.length === 0) {
       router.push("auth/sign-in");
       return;
-    } else if (!auth && !inAuthGroup) {
+    } else if (!ready && !inAuthGroup) {
       router.push("auth/sign-in");
       return;
-    } else if (auth && inAuthGroup) {
+    } else if (ready && inAuthGroup) {
       router.replace("/(home)/home");
       return;
     }
-  }, [auth, segments, navigationState]);
+  }, [loggedIn, segments, navigationState, UserData]);
 }
 
 export function AuthProvider(props) {
-  const [authData, setAuth] = React.useState(null);
-  const [errorMessage, setErrorMessage] = React.useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  // const [authData, setAuth] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const { addLog } = useLogging();
+  const { setCurrentUser, clearCurrentUser } = useUser();
 
   const handleLogin = async (username: string, password: string): Promise<boolean> => {
-    await addLog(`Auth provider handle login ${username} - ${password}`);
-    const result = await useLogin(username, password);
-    await addLog(`Auth provider handle login result ${result.success}`);
-    return handleAuthResult(result);
+    useLogin(username, password).then(loginResult => {
+      handleAuthResult(loginResult).then(() => {
+        setCurrentUser();
+        setLoggedIn(true);
+      })
+    });
+    return true;
+
+    // await addLog(`Auth provider handle login ${username} - ${password}`);
+    // console.log("logging in");
+    // const result = await useLogin(username, password);
+    // await addLog(`Auth provider handle login result ${result.success}`);
+    // console.log(`Use login result ${result.success}`);
+    // handleAuthResult(result).then()
+    // await setCurrentUser();
+    // await setLoggedIn(true);
+    // return true;
+  }
+
+  const handleLogout = async () => {
+    storage.remove({ key: 'bearerToken' }).then(() => {
+      setLoggedIn(false);
+      clearCurrentUser();
+    });
   }
 
   const handleRegister = async (registerData: RegisterData): Promise<boolean> => {
@@ -69,25 +96,26 @@ export function AuthProvider(props) {
 
   const handleAuthResult = async (result: AuthResult): Promise<boolean> => {
     if (result?.success) {
-      setAuth(result.data.token);
+      // setAuth(result.data.token);
+      console.log(`setting token ${result.data.token}`);
       await storage.save({ key: 'bearerToken', data: result.data.token })
       setErrorMessage(null);
     } else {
-      setAuth(null);
+      // setAuth(null);loggedIn
       setErrorMessage(result.message);
     }
     return result?.success;
   }
 
-  useProtectedRoute(authData);
+  useProtectedRoute(loggedIn);
 
   return (
     <AuthContext.Provider
       value={{
         signIn: (username: string, password: string) => handleLogin(username, password),
-        signOut: () => setAuth(null),
+        signOut: handleLogout,
         register: (registerData: RegisterData) => handleRegister(registerData),
-        authData,
+        loggedIn,
         errorMessage
       }}>
       {props.children}

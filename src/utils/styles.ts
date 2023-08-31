@@ -14,6 +14,18 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
     // justifyContent: 'flex-start'
   },
+  viewRow: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  viewColumn: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   button: {
     alignItems: 'center',
     justifyContent: 'center',

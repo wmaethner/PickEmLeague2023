@@ -21,7 +21,8 @@ export default function SignIn() {
 
   const handleLogin = async () => {
     await addLog(`Attempting login ${username} - ${password}`);
-    await signIn(username, password);
+    // await signIn(username, password);
+    await signIn("test", "password");
   }
 
   return (

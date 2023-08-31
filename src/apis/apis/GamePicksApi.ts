@@ -15,11 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
-  GamePick,
+  GamePickModel,
 } from '../models';
 import {
-    GamePickFromJSON,
-    GamePickToJSON,
+    GamePickModelFromJSON,
+    GamePickModelToJSON,
 } from '../models';
 
 export interface GetGamePicksByUserAndWeekRequest {
@@ -39,7 +39,7 @@ export class GamePicksApi extends runtime.BaseAPI {
     /**
      * Retrieve a list of game picks
      */
-    async getGamePickListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GamePick>> {
+    async getGamePickListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GamePickModel>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -51,20 +51,20 @@ export class GamePicksApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GamePickFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GamePickModelFromJSON(jsonValue));
     }
 
     /**
      * Retrieve a list of game picks
      */
-    async getGamePickList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GamePick> {
+    async getGamePickList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GamePickModel> {
         const response = await this.getGamePickListRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getGamePicksByUserAndWeekRaw(requestParameters: GetGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GamePick>>> {
+    async getGamePicksByUserAndWeekRaw(requestParameters: GetGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GamePickModel>>> {
         if (requestParameters.userId === null || requestParameters.userId === undefined) {
             throw new runtime.RequiredError('userId','Required parameter requestParameters.userId was null or undefined when calling getGamePicksByUserAndWeek.');
         }
@@ -84,19 +84,19 @@ export class GamePicksApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GamePickFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GamePickModelFromJSON));
     }
 
     /**
      */
-    async getGamePicksByUserAndWeek(requestParameters: GetGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GamePick>> {
+    async getGamePicksByUserAndWeek(requestParameters: GetGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GamePickModel>> {
         const response = await this.getGamePicksByUserAndWeekRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getGamePicksByWeekRaw(requestParameters: GetGamePicksByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GamePick>>> {
+    async getGamePicksByWeekRaw(requestParameters: GetGamePicksByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GamePickModel>>> {
         if (requestParameters.week === null || requestParameters.week === undefined) {
             throw new runtime.RequiredError('week','Required parameter requestParameters.week was null or undefined when calling getGamePicksByWeek.');
         }
@@ -112,12 +112,12 @@ export class GamePicksApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GamePickFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GamePickModelFromJSON));
     }
 
     /**
      */
-    async getGamePicksByWeek(requestParameters: GetGamePicksByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GamePick>> {
+    async getGamePicksByWeek(requestParameters: GetGamePicksByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GamePickModel>> {
         const response = await this.getGamePicksByWeekRaw(requestParameters, initOverrides);
         return await response.value();
     }

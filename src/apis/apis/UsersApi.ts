@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
-  User,
+  UserListModel,
+  UserModel,
 } from '../models';
 import {
-    UserFromJSON,
-    UserToJSON,
+    UserListModelFromJSON,
+    UserListModelToJSON,
+    UserModelFromJSON,
+    UserModelToJSON,
 } from '../models';
 
 /**
@@ -54,10 +57,14 @@ export class UsersApi extends runtime.BaseAPI {
 
     /**
      */
-    async getCurrentUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
+    async getCurrentUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserModel>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
 
         const response = await this.request({
             path: `/users/current`,
@@ -66,12 +73,12 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserModelFromJSON(jsonValue));
     }
 
     /**
      */
-    async getCurrentUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
+    async getCurrentUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserModel> {
         const response = await this.getCurrentUserRaw(initOverrides);
         return await response.value();
     }
@@ -79,7 +86,7 @@ export class UsersApi extends runtime.BaseAPI {
     /**
      * Retrieve a list of users
      */
-    async getUserListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
+    async getUserListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserListModel>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -91,13 +98,13 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserListModelFromJSON(jsonValue));
     }
 
     /**
      * Retrieve a list of users
      */
-    async getUserList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
+    async getUserList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserListModel> {
         const response = await this.getUserListRaw(initOverrides);
         return await response.value();
     }

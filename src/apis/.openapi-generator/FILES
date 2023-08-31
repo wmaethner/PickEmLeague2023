@@ -10,10 +10,13 @@ index.ts
 models/AuthData.ts
 models/AuthResult.ts
 models/Game.ts
-models/GamePick.ts
+models/GamePickData.ts
+models/GamePickModel.ts
 models/MiscData.ts
 models/MiscResult.ts
 models/Team.ts
-models/User.ts
+models/UserData.ts
+models/UserListModel.ts
+models/UserModel.ts
 models/index.ts
 runtime.ts
