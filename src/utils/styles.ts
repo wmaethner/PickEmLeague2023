@@ -12,13 +12,12 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
-    // justifyContent: 'flex-start'
   },
   viewRow: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   viewColumn: {
     flex: 1,
@@ -72,4 +71,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  noPadding: {
+    padding: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0
+  },
+  darkText: {
+    color: 'black'
+  }
 });

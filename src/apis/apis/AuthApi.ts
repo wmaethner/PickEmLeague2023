@@ -15,11 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
-  AuthResult,
+  AuthModel,
 } from '../models';
 import {
-    AuthResultFromJSON,
-    AuthResultToJSON,
+    AuthModelFromJSON,
+    AuthModelToJSON,
 } from '../models';
 
 export interface PostLoginUserRequest {
@@ -42,7 +42,7 @@ export class AuthApi extends runtime.BaseAPI {
 
     /**
      */
-    async postLoginUserRaw(requestParameters: PostLoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthResult>> {
+    async postLoginUserRaw(requestParameters: PostLoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthModel>> {
         if (requestParameters.username === null || requestParameters.username === undefined) {
             throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling postLoginUser.');
         }
@@ -86,19 +86,19 @@ export class AuthApi extends runtime.BaseAPI {
             body: formParams,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AuthResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuthModelFromJSON(jsonValue));
     }
 
     /**
      */
-    async postLoginUser(requestParameters: PostLoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthResult> {
+    async postLoginUser(requestParameters: PostLoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthModel> {
         const response = await this.postLoginUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async postRegisterUserRaw(requestParameters: PostRegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthResult>> {
+    async postRegisterUserRaw(requestParameters: PostRegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthModel>> {
         if (requestParameters.firstName === null || requestParameters.firstName === undefined) {
             throw new runtime.RequiredError('firstName','Required parameter requestParameters.firstName was null or undefined when calling postRegisterUser.');
         }
@@ -166,12 +166,12 @@ export class AuthApi extends runtime.BaseAPI {
             body: formParams,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AuthResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuthModelFromJSON(jsonValue));
     }
 
     /**
      */
-    async postRegisterUser(requestParameters: PostRegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthResult> {
+    async postRegisterUser(requestParameters: PostRegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthModel> {
         const response = await this.postRegisterUserRaw(requestParameters, initOverrides);
         return await response.value();
     }

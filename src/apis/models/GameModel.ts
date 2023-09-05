@@ -13,53 +13,53 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { AuthData } from './AuthData';
+import type { GameSchema } from './GameSchema';
 import {
-    AuthDataFromJSON,
-    AuthDataFromJSONTyped,
-    AuthDataToJSON,
-} from './AuthData';
+    GameSchemaFromJSON,
+    GameSchemaFromJSONTyped,
+    GameSchemaToJSON,
+} from './GameSchema';
 
 /**
  * 
  * @export
- * @interface AuthResult
+ * @interface GameModel
  */
-export interface AuthResult {
+export interface GameModel {
     /**
      * 
      * @type {boolean}
-     * @memberof AuthResult
+     * @memberof GameModel
      */
     success?: boolean;
     /**
      * 
      * @type {string}
-     * @memberof AuthResult
+     * @memberof GameModel
      */
     message?: string;
     /**
      * 
-     * @type {AuthData}
-     * @memberof AuthResult
+     * @type {GameSchema}
+     * @memberof GameModel
      */
-    data?: AuthData;
+    data?: GameSchema;
 }
 
 /**
- * Check if a given object implements the AuthResult interface.
+ * Check if a given object implements the GameModel interface.
  */
-export function instanceOfAuthResult(value: object): boolean {
+export function instanceOfGameModel(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function AuthResultFromJSON(json: any): AuthResult {
-    return AuthResultFromJSONTyped(json, false);
+export function GameModelFromJSON(json: any): GameModel {
+    return GameModelFromJSONTyped(json, false);
 }
 
-export function AuthResultFromJSONTyped(json: any, ignoreDiscriminator: boolean): AuthResult {
+export function GameModelFromJSONTyped(json: any, ignoreDiscriminator: boolean): GameModel {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -67,11 +67,11 @@ export function AuthResultFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         
         'success': !exists(json, 'success') ? undefined : json['success'],
         'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : AuthDataFromJSON(json['data']),
+        'data': !exists(json, 'data') ? undefined : GameSchemaFromJSON(json['data']),
     };
 }
 
-export function AuthResultToJSON(value?: AuthResult | null): any {
+export function GameModelToJSON(value?: GameModel | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -82,7 +82,7 @@ export function AuthResultToJSON(value?: AuthResult | null): any {
         
         'success': value.success,
         'message': value.message,
-        'data': AuthDataToJSON(value.data),
+        'data': GameSchemaToJSON(value.data),
     };
 }
 

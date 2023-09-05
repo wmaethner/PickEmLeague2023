@@ -13,53 +13,53 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { GamePickSchema } from './GamePickSchema';
+import type { AuthSchema } from './AuthSchema';
 import {
-    GamePickSchemaFromJSON,
-    GamePickSchemaFromJSONTyped,
-    GamePickSchemaToJSON,
-} from './GamePickSchema';
+    AuthSchemaFromJSON,
+    AuthSchemaFromJSONTyped,
+    AuthSchemaToJSON,
+} from './AuthSchema';
 
 /**
  * 
  * @export
- * @interface GamePickModel
+ * @interface AuthModel
  */
-export interface GamePickModel {
+export interface AuthModel {
     /**
      * 
      * @type {boolean}
-     * @memberof GamePickModel
+     * @memberof AuthModel
      */
     success?: boolean;
     /**
      * 
      * @type {string}
-     * @memberof GamePickModel
+     * @memberof AuthModel
      */
     message?: string;
     /**
      * 
-     * @type {GamePickSchema}
-     * @memberof GamePickModel
+     * @type {AuthSchema}
+     * @memberof AuthModel
      */
-    data?: GamePickSchema;
+    data?: AuthSchema;
 }
 
 /**
- * Check if a given object implements the GamePickModel interface.
+ * Check if a given object implements the AuthModel interface.
  */
-export function instanceOfGamePickModel(value: object): boolean {
+export function instanceOfAuthModel(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function GamePickModelFromJSON(json: any): GamePickModel {
-    return GamePickModelFromJSONTyped(json, false);
+export function AuthModelFromJSON(json: any): AuthModel {
+    return AuthModelFromJSONTyped(json, false);
 }
 
-export function GamePickModelFromJSONTyped(json: any, ignoreDiscriminator: boolean): GamePickModel {
+export function AuthModelFromJSONTyped(json: any, ignoreDiscriminator: boolean): AuthModel {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -67,11 +67,11 @@ export function GamePickModelFromJSONTyped(json: any, ignoreDiscriminator: boole
         
         'success': !exists(json, 'success') ? undefined : json['success'],
         'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : GamePickSchemaFromJSON(json['data']),
+        'data': !exists(json, 'data') ? undefined : AuthSchemaFromJSON(json['data']),
     };
 }
 
-export function GamePickModelToJSON(value?: GamePickModel | null): any {
+export function AuthModelToJSON(value?: AuthModel | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -82,7 +82,7 @@ export function GamePickModelToJSON(value?: GamePickModel | null): any {
         
         'success': value.success,
         'message': value.message,
-        'data': GamePickSchemaToJSON(value.data),
+        'data': AuthSchemaToJSON(value.data),
     };
 }
 

@@ -15,11 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
-  MiscResult,
+  MiscModel,
 } from '../models';
 import {
-    MiscResultFromJSON,
-    MiscResultToJSON,
+    MiscModelFromJSON,
+    MiscModelToJSON,
 } from '../models';
 
 /**
@@ -29,7 +29,7 @@ export class MiscApi extends runtime.BaseAPI {
 
     /**
      */
-    async getMiscInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MiscResult>> {
+    async getMiscInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MiscModel>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -41,12 +41,12 @@ export class MiscApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => MiscResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => MiscModelFromJSON(jsonValue));
     }
 
     /**
      */
-    async getMiscInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MiscResult> {
+    async getMiscInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MiscModel> {
         const response = await this.getMiscInfoRaw(initOverrides);
         return await response.value();
     }

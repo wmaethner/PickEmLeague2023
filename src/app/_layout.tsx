@@ -1,9 +1,9 @@
 import { Slot } from 'expo-router';
-import { ImageBackground } from 'react-native';
+import { SafeAreaView } from 'react-native';
+import AppBackground from '../components/appBackground';
 import { AuthProvider } from '../context/auth';
 import { LoggingProvider } from '../context/logging';
 import { UserProvider } from '../context/user';
-import { styles } from '../utils/styles';
 
 export default function Root() {
   return (
@@ -11,9 +11,11 @@ export default function Root() {
     <LoggingProvider>
       <UserProvider>
         <AuthProvider>
-          <ImageBackground source={require('../../assets/background.jpeg')} resizeMode='cover' style={styles.image}>
-            <Slot />
-          </ImageBackground>
+          <AppBackground>
+            <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
+              <Slot />
+            </SafeAreaView>
+          </AppBackground>
         </AuthProvider>
       </UserProvider>
     </LoggingProvider>

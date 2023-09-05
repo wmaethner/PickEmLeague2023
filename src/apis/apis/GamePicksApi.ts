@@ -15,20 +15,41 @@
 
 import * as runtime from '../runtime';
 import type {
+  GamePickListModel,
   GamePickModel,
+  GamePickSchema,
 } from '../models';
 import {
+    GamePickListModelFromJSON,
+    GamePickListModelToJSON,
     GamePickModelFromJSON,
     GamePickModelToJSON,
+    GamePickSchemaFromJSON,
+    GamePickSchemaToJSON,
 } from '../models';
 
+export interface GetGamePickByIdRequest {
+    id: number;
+}
+
 export interface GetGamePicksByUserAndWeekRequest {
-    userId: string;
-    week: string;
+    userId: number;
+    week: number;
 }
 
 export interface GetGamePicksByWeekRequest {
-    week: string;
+    week: number;
+}
+
+export interface PutGamePickByIdRequest {
+    id: number;
+    payload: GamePickSchema;
+}
+
+export interface PutGamePicksByUserAndWeekRequest {
+    userId: number;
+    week: number;
+    payload: Array<GamePickSchema>;
 }
 
 /**
@@ -37,9 +58,37 @@ export interface GetGamePicksByWeekRequest {
 export class GamePicksApi extends runtime.BaseAPI {
 
     /**
+     */
+    async getGamePickByIdRaw(requestParameters: GetGamePickByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GamePickModel>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getGamePickById.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/game_picks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GamePickModelFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async getGamePickById(requestParameters: GetGamePickByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GamePickModel> {
+        const response = await this.getGamePickByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Retrieve a list of game picks
      */
-    async getGamePickListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GamePickModel>> {
+    async getGamePickListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GamePickListModel>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -51,20 +100,20 @@ export class GamePicksApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GamePickModelFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GamePickListModelFromJSON(jsonValue));
     }
 
     /**
      * Retrieve a list of game picks
      */
-    async getGamePickList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GamePickModel> {
+    async getGamePickList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GamePickListModel> {
         const response = await this.getGamePickListRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getGamePicksByUserAndWeekRaw(requestParameters: GetGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GamePickModel>>> {
+    async getGamePicksByUserAndWeekRaw(requestParameters: GetGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GamePickListModel>> {
         if (requestParameters.userId === null || requestParameters.userId === undefined) {
             throw new runtime.RequiredError('userId','Required parameter requestParameters.userId was null or undefined when calling getGamePicksByUserAndWeek.');
         }
@@ -84,19 +133,19 @@ export class GamePicksApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GamePickModelFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GamePickListModelFromJSON(jsonValue));
     }
 
     /**
      */
-    async getGamePicksByUserAndWeek(requestParameters: GetGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GamePickModel>> {
+    async getGamePicksByUserAndWeek(requestParameters: GetGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GamePickListModel> {
         const response = await this.getGamePicksByUserAndWeekRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getGamePicksByWeekRaw(requestParameters: GetGamePicksByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GamePickModel>>> {
+    async getGamePicksByWeekRaw(requestParameters: GetGamePicksByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GamePickListModel>> {
         if (requestParameters.week === null || requestParameters.week === undefined) {
             throw new runtime.RequiredError('week','Required parameter requestParameters.week was null or undefined when calling getGamePicksByWeek.');
         }
@@ -112,14 +161,86 @@ export class GamePicksApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GamePickModelFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GamePickListModelFromJSON(jsonValue));
     }
 
     /**
      */
-    async getGamePicksByWeek(requestParameters: GetGamePicksByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GamePickModel>> {
+    async getGamePicksByWeek(requestParameters: GetGamePicksByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GamePickListModel> {
         const response = await this.getGamePicksByWeekRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async putGamePickByIdRaw(requestParameters: PutGamePickByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling putGamePickById.');
+        }
+
+        if (requestParameters.payload === null || requestParameters.payload === undefined) {
+            throw new runtime.RequiredError('payload','Required parameter requestParameters.payload was null or undefined when calling putGamePickById.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/game_picks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: GamePickSchemaToJSON(requestParameters.payload),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async putGamePickById(requestParameters: PutGamePickByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putGamePickByIdRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async putGamePicksByUserAndWeekRaw(requestParameters: PutGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+            throw new runtime.RequiredError('userId','Required parameter requestParameters.userId was null or undefined when calling putGamePicksByUserAndWeek.');
+        }
+
+        if (requestParameters.week === null || requestParameters.week === undefined) {
+            throw new runtime.RequiredError('week','Required parameter requestParameters.week was null or undefined when calling putGamePicksByUserAndWeek.');
+        }
+
+        if (requestParameters.payload === null || requestParameters.payload === undefined) {
+            throw new runtime.RequiredError('payload','Required parameter requestParameters.payload was null or undefined when calling putGamePicksByUserAndWeek.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/game_picks/{week}/{user_id}`.replace(`{${"user_id"}}`, encodeURIComponent(String(requestParameters.userId))).replace(`{${"week"}}`, encodeURIComponent(String(requestParameters.week))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.payload.map(GamePickSchemaToJSON),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async putGamePicksByUserAndWeek(requestParameters: PutGamePicksByUserAndWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putGamePicksByUserAndWeekRaw(requestParameters, initOverrides);
     }
 
 }

@@ -13,53 +13,53 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { GamePickSchema } from './GamePickSchema';
+import type { TeamSchema } from './TeamSchema';
 import {
-    GamePickSchemaFromJSON,
-    GamePickSchemaFromJSONTyped,
-    GamePickSchemaToJSON,
-} from './GamePickSchema';
+    TeamSchemaFromJSON,
+    TeamSchemaFromJSONTyped,
+    TeamSchemaToJSON,
+} from './TeamSchema';
 
 /**
  * 
  * @export
- * @interface GamePickModel
+ * @interface TeamListModel
  */
-export interface GamePickModel {
+export interface TeamListModel {
     /**
      * 
      * @type {boolean}
-     * @memberof GamePickModel
+     * @memberof TeamListModel
      */
     success?: boolean;
     /**
      * 
      * @type {string}
-     * @memberof GamePickModel
+     * @memberof TeamListModel
      */
     message?: string;
     /**
      * 
-     * @type {GamePickSchema}
-     * @memberof GamePickModel
+     * @type {Array<TeamSchema>}
+     * @memberof TeamListModel
      */
-    data?: GamePickSchema;
+    data?: Array<TeamSchema>;
 }
 
 /**
- * Check if a given object implements the GamePickModel interface.
+ * Check if a given object implements the TeamListModel interface.
  */
-export function instanceOfGamePickModel(value: object): boolean {
+export function instanceOfTeamListModel(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function GamePickModelFromJSON(json: any): GamePickModel {
-    return GamePickModelFromJSONTyped(json, false);
+export function TeamListModelFromJSON(json: any): TeamListModel {
+    return TeamListModelFromJSONTyped(json, false);
 }
 
-export function GamePickModelFromJSONTyped(json: any, ignoreDiscriminator: boolean): GamePickModel {
+export function TeamListModelFromJSONTyped(json: any, ignoreDiscriminator: boolean): TeamListModel {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -67,11 +67,11 @@ export function GamePickModelFromJSONTyped(json: any, ignoreDiscriminator: boole
         
         'success': !exists(json, 'success') ? undefined : json['success'],
         'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : GamePickSchemaFromJSON(json['data']),
+        'data': !exists(json, 'data') ? undefined : ((json['data'] as Array<any>).map(TeamSchemaFromJSON)),
     };
 }
 
-export function GamePickModelToJSON(value?: GamePickModel | null): any {
+export function TeamListModelToJSON(value?: TeamListModel | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -82,7 +82,7 @@ export function GamePickModelToJSON(value?: GamePickModel | null): any {
         
         'success': value.success,
         'message': value.message,
-        'data': GamePickSchemaToJSON(value.data),
+        'data': value.data === undefined ? undefined : ((value.data as Array<any>).map(TeamSchemaToJSON)),
     };
 }
 

@@ -1,7 +1,8 @@
 import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import { AuthResult } from '../apis/models/AuthResult';
+// import { AuthResult } from '../apis/models/AuthResult';
+import { AuthModel } from '../apis';
 import { useLogin } from '../hooks/auth/useLogin';
 import { RegisterData, useRegister } from '../hooks/auth/useRegister';
 import storage from '../utils/storage';
@@ -63,23 +64,36 @@ export function AuthProvider(props) {
   const { setCurrentUser, clearCurrentUser } = useUser();
 
   const handleLogin = async (username: string, password: string): Promise<boolean> => {
-    useLogin(username, password).then(loginResult => {
+    // console.log("handle login")
+    // useLogin(username, password).then(loginResult => {
+    //   console.log(`login result`);
+    //   console.log(loginResult);
+    //   handleAuthResult(loginResult).then(() => {
+    //     setCurrentUser();
+    //     setLoggedIn(true);
+    //   })
+    // });
+    useLogin(username, password).then(authCallback);
+    return true;
+  }
+
+  const handleRegister = async (registerData: RegisterData): Promise<boolean> => {
+    useRegister(registerData).then(loginResult => {
+      console.log(`login result`);
+      console.log(loginResult);
       handleAuthResult(loginResult).then(() => {
         setCurrentUser();
         setLoggedIn(true);
       })
     });
     return true;
+  }
 
-    // await addLog(`Auth provider handle login ${username} - ${password}`);
-    // console.log("logging in");
-    // const result = await useLogin(username, password);
-    // await addLog(`Auth provider handle login result ${result.success}`);
-    // console.log(`Use login result ${result.success}`);
-    // handleAuthResult(result).then()
-    // await setCurrentUser();
-    // await setLoggedIn(true);
-    // return true;
+  const authCallback = (result: AuthModel) => {
+    handleAuthResult(result).then(() => {
+      setCurrentUser();
+      setLoggedIn(true);
+    })
   }
 
   const handleLogout = async () => {
@@ -89,12 +103,7 @@ export function AuthProvider(props) {
     });
   }
 
-  const handleRegister = async (registerData: RegisterData): Promise<boolean> => {
-    const result = await useRegister(registerData);
-    return await handleAuthResult(result);
-  }
-
-  const handleAuthResult = async (result: AuthResult): Promise<boolean> => {
+  const handleAuthResult = async (result: AuthModel): Promise<boolean> => {
     if (result?.success) {
       // setAuth(result.data.token);
       console.log(`setting token ${result.data.token}`);

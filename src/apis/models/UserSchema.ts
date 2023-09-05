@@ -16,61 +16,61 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UserData
+ * @interface UserSchema
  */
-export interface UserData {
+export interface UserSchema {
     /**
      * 
      * @type {number}
-     * @memberof UserData
+     * @memberof UserSchema
      */
     id?: number;
     /**
      * 
      * @type {string}
-     * @memberof UserData
+     * @memberof UserSchema
      */
     username?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserData
+     * @memberof UserSchema
      */
     firstName?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserData
+     * @memberof UserSchema
      */
     lastName?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserData
+     * @memberof UserSchema
      */
     email?: string;
     /**
      * 
      * @type {boolean}
-     * @memberof UserData
+     * @memberof UserSchema
      */
     admin?: boolean;
 }
 
 /**
- * Check if a given object implements the UserData interface.
+ * Check if a given object implements the UserSchema interface.
  */
-export function instanceOfUserData(value: object): boolean {
+export function instanceOfUserSchema(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function UserDataFromJSON(json: any): UserData {
-    return UserDataFromJSONTyped(json, false);
+export function UserSchemaFromJSON(json: any): UserSchema {
+    return UserSchemaFromJSONTyped(json, false);
 }
 
-export function UserDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserData {
+export function UserSchemaFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserSchema {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -85,7 +85,7 @@ export function UserDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     };
 }
 
-export function UserDataToJSON(value?: UserData | null): any {
+export function UserSchemaToJSON(value?: UserSchema | null): any {
     if (value === undefined) {
         return undefined;
     }

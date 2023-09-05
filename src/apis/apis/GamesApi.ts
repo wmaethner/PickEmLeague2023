@@ -15,12 +15,22 @@
 
 import * as runtime from '../runtime';
 import type {
-  Game,
+  GameListModel,
+  GameModel,
+  GameSchema,
 } from '../models';
 import {
-    GameFromJSON,
-    GameToJSON,
+    GameListModelFromJSON,
+    GameListModelToJSON,
+    GameModelFromJSON,
+    GameModelToJSON,
+    GameSchemaFromJSON,
+    GameSchemaToJSON,
 } from '../models';
+
+export interface GetGameByIdRequest {
+    id: number;
+}
 
 export interface GetGameByWeekAndTeamRequest {
     abbr: string;
@@ -35,6 +45,11 @@ export interface PostGameListRequest {
     gameFile: Blob;
 }
 
+export interface PutGameByIdRequest {
+    id: number;
+    payload: GameSchema;
+}
+
 /**
  * 
  */
@@ -42,7 +57,35 @@ export class GamesApi extends runtime.BaseAPI {
 
     /**
      */
-    async getGameByWeekAndTeamRaw(requestParameters: GetGameByWeekAndTeamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Game>> {
+    async getGameByIdRaw(requestParameters: GetGameByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GameModel>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getGameById.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/games/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GameModelFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async getGameById(requestParameters: GetGameByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GameModel> {
+        const response = await this.getGameByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getGameByWeekAndTeamRaw(requestParameters: GetGameByWeekAndTeamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GameModel>> {
         if (requestParameters.abbr === null || requestParameters.abbr === undefined) {
             throw new runtime.RequiredError('abbr','Required parameter requestParameters.abbr was null or undefined when calling getGameByWeekAndTeam.');
         }
@@ -62,12 +105,12 @@ export class GamesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GameFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GameModelFromJSON(jsonValue));
     }
 
     /**
      */
-    async getGameByWeekAndTeam(requestParameters: GetGameByWeekAndTeamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Game> {
+    async getGameByWeekAndTeam(requestParameters: GetGameByWeekAndTeamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GameModel> {
         const response = await this.getGameByWeekAndTeamRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -75,7 +118,7 @@ export class GamesApi extends runtime.BaseAPI {
     /**
      * Retrieve a list of games
      */
-    async getGameListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Game>>> {
+    async getGameListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GameListModel>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -87,20 +130,20 @@ export class GamesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GameFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GameListModelFromJSON(jsonValue));
     }
 
     /**
      * Retrieve a list of games
      */
-    async getGameList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Game>> {
+    async getGameList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GameListModel> {
         const response = await this.getGameListRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async getGamesByWeekRaw(requestParameters: GetGamesByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Game>>> {
+    async getGamesByWeekRaw(requestParameters: GetGamesByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GameListModel>> {
         if (requestParameters.week === null || requestParameters.week === undefined) {
             throw new runtime.RequiredError('week','Required parameter requestParameters.week was null or undefined when calling getGamesByWeek.');
         }
@@ -110,18 +153,18 @@ export class GamesApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/games/{week}`.replace(`{${"week"}}`, encodeURIComponent(String(requestParameters.week))),
+            path: `/games/by_week/{week}`.replace(`{${"week"}}`, encodeURIComponent(String(requestParameters.week))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GameFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GameListModelFromJSON(jsonValue));
     }
 
     /**
      */
-    async getGamesByWeek(requestParameters: GetGamesByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Game>> {
+    async getGamesByWeek(requestParameters: GetGamesByWeekRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GameListModel> {
         const response = await this.getGamesByWeekRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -172,6 +215,40 @@ export class GamesApi extends runtime.BaseAPI {
      */
     async postGameList(requestParameters: PostGameListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postGameListRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async putGameByIdRaw(requestParameters: PutGameByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling putGameById.');
+        }
+
+        if (requestParameters.payload === null || requestParameters.payload === undefined) {
+            throw new runtime.RequiredError('payload','Required parameter requestParameters.payload was null or undefined when calling putGameById.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/games/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: GameSchemaToJSON(requestParameters.payload),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async putGameById(requestParameters: PutGameByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putGameByIdRaw(requestParameters, initOverrides);
     }
 
 }

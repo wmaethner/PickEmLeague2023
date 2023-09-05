@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { UserData } from './UserData';
+import type { UserSchema } from './UserSchema';
 import {
-    UserDataFromJSON,
-    UserDataFromJSONTyped,
-    UserDataToJSON,
-} from './UserData';
+    UserSchemaFromJSON,
+    UserSchemaFromJSONTyped,
+    UserSchemaToJSON,
+} from './UserSchema';
 
 /**
  * 
@@ -40,10 +40,10 @@ export interface UserModel {
     message?: string;
     /**
      * 
-     * @type {UserData}
+     * @type {UserSchema}
      * @memberof UserModel
      */
-    data?: UserData;
+    data?: UserSchema;
 }
 
 /**
@@ -67,7 +67,7 @@ export function UserModelFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         
         'success': !exists(json, 'success') ? undefined : json['success'],
         'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : UserDataFromJSON(json['data']),
+        'data': !exists(json, 'data') ? undefined : UserSchemaFromJSON(json['data']),
     };
 }
 
@@ -82,7 +82,7 @@ export function UserModelToJSON(value?: UserModel | null): any {
         
         'success': value.success,
         'message': value.message,
-        'data': UserDataToJSON(value.data),
+        'data': UserSchemaToJSON(value.data),
     };
 }
 

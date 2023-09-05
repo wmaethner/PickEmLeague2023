@@ -16,41 +16,41 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface AuthData
+ * @interface MiscSchema
  */
-export interface AuthData {
+export interface MiscSchema {
     /**
      * 
-     * @type {string}
-     * @memberof AuthData
+     * @type {boolean}
+     * @memberof MiscSchema
      */
-    token?: string;
+    started?: boolean;
 }
 
 /**
- * Check if a given object implements the AuthData interface.
+ * Check if a given object implements the MiscSchema interface.
  */
-export function instanceOfAuthData(value: object): boolean {
+export function instanceOfMiscSchema(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function AuthDataFromJSON(json: any): AuthData {
-    return AuthDataFromJSONTyped(json, false);
+export function MiscSchemaFromJSON(json: any): MiscSchema {
+    return MiscSchemaFromJSONTyped(json, false);
 }
 
-export function AuthDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): AuthData {
+export function MiscSchemaFromJSONTyped(json: any, ignoreDiscriminator: boolean): MiscSchema {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'token': !exists(json, 'token') ? undefined : json['token'],
+        'started': !exists(json, 'started') ? undefined : json['started'],
     };
 }
 
-export function AuthDataToJSON(value?: AuthData | null): any {
+export function MiscSchemaToJSON(value?: MiscSchema | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -59,7 +59,7 @@ export function AuthDataToJSON(value?: AuthData | null): any {
     }
     return {
         
-        'token': value.token,
+        'started': value.started,
     };
 }
 

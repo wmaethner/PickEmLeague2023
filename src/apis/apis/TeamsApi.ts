@@ -15,20 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  Team,
+  TeamListModel,
 } from '../models';
 import {
-    TeamFromJSON,
-    TeamToJSON,
+    TeamListModelFromJSON,
+    TeamListModelToJSON,
 } from '../models';
-
-export interface GetTeamByAbbrRequest {
-    abbr: string;
-}
-
-export interface GetTeamByIdRequest {
-    id: string;
-}
 
 export interface PostTeamListRequest {
     teamFile: Blob;
@@ -41,64 +33,7 @@ export class TeamsApi extends runtime.BaseAPI {
 
     /**
      */
-    async getTeamByAbbrRaw(requestParameters: GetTeamByAbbrRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Team>> {
-        if (requestParameters.abbr === null || requestParameters.abbr === undefined) {
-            throw new runtime.RequiredError('abbr','Required parameter requestParameters.abbr was null or undefined when calling getTeamByAbbr.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/teams/by_abbr/{abbr}`.replace(`{${"abbr"}}`, encodeURIComponent(String(requestParameters.abbr))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => TeamFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async getTeamByAbbr(requestParameters: GetTeamByAbbrRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Team> {
-        const response = await this.getTeamByAbbrRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async getTeamByIdRaw(requestParameters: GetTeamByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Team>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getTeamById.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/teams/by_id/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => TeamFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async getTeamById(requestParameters: GetTeamByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Team> {
-        const response = await this.getTeamByIdRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Retrieve a list of users
-     */
-    async getTeamListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Team>>> {
+    async getTeamListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TeamListModel>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -110,13 +45,12 @@ export class TeamsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TeamFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => TeamListModelFromJSON(jsonValue));
     }
 
     /**
-     * Retrieve a list of users
      */
-    async getTeamList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Team>> {
+    async getTeamList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TeamListModel> {
         const response = await this.getTeamListRaw(initOverrides);
         return await response.value();
     }

@@ -17,22 +17,16 @@
     ],
     "ios": {
       "bundleIdentifier": "pickemleague2023ios",
-      "buildNumber": "4",
+      "buildNumber": "5",
       "supportsTablet": true,
       "infoPlist": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
-          // "NSExceptionDomains": {
-          //   "PickEmLeague2023-env.eba-8mjsx79p.us-east-1.elasticbeanstalk.com": {
-          //     "NSTemporaryExceptionAllowsInsecureHTTPLoads": true
-          //   }
-          // }
         }
       }
     },
     "android": {
       "adaptiveIcon": {
-        // "foregroundImage": "./assets/adaptive-icon.png",
         "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#ffffff"
       },
@@ -42,7 +36,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-localization"
     ],
     "extra": {
       "router": {

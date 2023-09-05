@@ -16,69 +16,62 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Team
+ * @interface TeamSchema
  */
-export interface Team {
+export interface TeamSchema {
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamSchema
+     */
+    id?: number;
     /**
      * 
      * @type {string}
-     * @memberof Team
+     * @memberof TeamSchema
      */
     name?: string;
     /**
      * 
      * @type {string}
-     * @memberof Team
+     * @memberof TeamSchema
      */
     city?: string;
     /**
      * 
      * @type {string}
-     * @memberof Team
+     * @memberof TeamSchema
      */
     abbreviation?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Team
-     */
-    conference?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Team
-     */
-    division?: string;
 }
 
 /**
- * Check if a given object implements the Team interface.
+ * Check if a given object implements the TeamSchema interface.
  */
-export function instanceOfTeam(value: object): boolean {
+export function instanceOfTeamSchema(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function TeamFromJSON(json: any): Team {
-    return TeamFromJSONTyped(json, false);
+export function TeamSchemaFromJSON(json: any): TeamSchema {
+    return TeamSchemaFromJSONTyped(json, false);
 }
 
-export function TeamFromJSONTyped(json: any, ignoreDiscriminator: boolean): Team {
+export function TeamSchemaFromJSONTyped(json: any, ignoreDiscriminator: boolean): TeamSchema {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
+        'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'city': !exists(json, 'city') ? undefined : json['city'],
         'abbreviation': !exists(json, 'abbreviation') ? undefined : json['abbreviation'],
-        'conference': !exists(json, 'conference') ? undefined : json['conference'],
-        'division': !exists(json, 'division') ? undefined : json['division'],
     };
 }
 
-export function TeamToJSON(value?: Team | null): any {
+export function TeamSchemaToJSON(value?: TeamSchema | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -87,11 +80,10 @@ export function TeamToJSON(value?: Team | null): any {
     }
     return {
         
+        'id': value.id,
         'name': value.name,
         'city': value.city,
         'abbreviation': value.abbreviation,
-        'conference': value.conference,
-        'division': value.division,
     };
 }
 

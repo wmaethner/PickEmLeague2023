@@ -2,14 +2,14 @@ import React, { createContext, useContext, useState } from 'react';
 
 // import { useLogin } from '../hooks/User/useLogin';
 // import { RegisterData, useRegister } from '../hooks/User/useRegister';
-import { UserData } from '../apis';
+import { UserSchema } from '../apis';
 import { useGetCurrentUser } from '../hooks/useGetCurrentUser';
 import { useLogging } from './logging';
 
 export type UserContextData = {
   setCurrentUser: () => void; 
   clearCurrentUser: () => void;
-  UserData: UserData;
+  UserData: UserSchema;
 }
 
 const UserContext = createContext<UserContextData>(null);
@@ -20,7 +20,7 @@ export function useUser() {
 }
 
 export function UserProvider(props) {
-  const [UserData, setUser] = useState(null);
+  const [UserData, setUser] = useState<UserSchema>(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const { addLog } = useLogging();
 

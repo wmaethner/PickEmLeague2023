@@ -1,4 +1,4 @@
-import { AuthApi, AuthResult } from "../../apis";
+import { AuthApi, AuthModel } from "../../apis";
 import useApi from "../useApi";
 
 export type RegisterData = {
@@ -9,7 +9,7 @@ export type RegisterData = {
   password: string;
 }
 
-export const useRegister = async (data: RegisterData): Promise<AuthResult> => {
+export const useRegister = async (data: RegisterData): Promise<AuthModel> => {
   const api = await useApi(AuthApi);
   try {
     return await api.postRegisterUser(data);

@@ -13,53 +13,53 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { MiscData } from './MiscData';
+import type { GamePickSchema } from './GamePickSchema';
 import {
-    MiscDataFromJSON,
-    MiscDataFromJSONTyped,
-    MiscDataToJSON,
-} from './MiscData';
+    GamePickSchemaFromJSON,
+    GamePickSchemaFromJSONTyped,
+    GamePickSchemaToJSON,
+} from './GamePickSchema';
 
 /**
  * 
  * @export
- * @interface MiscResult
+ * @interface GamePickListModel
  */
-export interface MiscResult {
+export interface GamePickListModel {
     /**
      * 
      * @type {boolean}
-     * @memberof MiscResult
+     * @memberof GamePickListModel
      */
     success?: boolean;
     /**
      * 
      * @type {string}
-     * @memberof MiscResult
+     * @memberof GamePickListModel
      */
     message?: string;
     /**
      * 
-     * @type {MiscData}
-     * @memberof MiscResult
+     * @type {Array<GamePickSchema>}
+     * @memberof GamePickListModel
      */
-    data?: MiscData;
+    data?: Array<GamePickSchema>;
 }
 
 /**
- * Check if a given object implements the MiscResult interface.
+ * Check if a given object implements the GamePickListModel interface.
  */
-export function instanceOfMiscResult(value: object): boolean {
+export function instanceOfGamePickListModel(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function MiscResultFromJSON(json: any): MiscResult {
-    return MiscResultFromJSONTyped(json, false);
+export function GamePickListModelFromJSON(json: any): GamePickListModel {
+    return GamePickListModelFromJSONTyped(json, false);
 }
 
-export function MiscResultFromJSONTyped(json: any, ignoreDiscriminator: boolean): MiscResult {
+export function GamePickListModelFromJSONTyped(json: any, ignoreDiscriminator: boolean): GamePickListModel {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -67,11 +67,11 @@ export function MiscResultFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         
         'success': !exists(json, 'success') ? undefined : json['success'],
         'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : MiscDataFromJSON(json['data']),
+        'data': !exists(json, 'data') ? undefined : ((json['data'] as Array<any>).map(GamePickSchemaFromJSON)),
     };
 }
 
-export function MiscResultToJSON(value?: MiscResult | null): any {
+export function GamePickListModelToJSON(value?: GamePickListModel | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -82,7 +82,7 @@ export function MiscResultToJSON(value?: MiscResult | null): any {
         
         'success': value.success,
         'message': value.message,
-        'data': MiscDataToJSON(value.data),
+        'data': value.data === undefined ? undefined : ((value.data as Array<any>).map(GamePickSchemaToJSON)),
     };
 }
 

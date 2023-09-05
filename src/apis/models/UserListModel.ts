@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { UserData } from './UserData';
+import type { UserSchema } from './UserSchema';
 import {
-    UserDataFromJSON,
-    UserDataFromJSONTyped,
-    UserDataToJSON,
-} from './UserData';
+    UserSchemaFromJSON,
+    UserSchemaFromJSONTyped,
+    UserSchemaToJSON,
+} from './UserSchema';
 
 /**
  * 
@@ -40,10 +40,10 @@ export interface UserListModel {
     message?: string;
     /**
      * 
-     * @type {Array<UserData>}
+     * @type {Array<UserSchema>}
      * @memberof UserListModel
      */
-    data?: Array<UserData>;
+    data?: Array<UserSchema>;
 }
 
 /**
@@ -67,7 +67,7 @@ export function UserListModelFromJSONTyped(json: any, ignoreDiscriminator: boole
         
         'success': !exists(json, 'success') ? undefined : json['success'],
         'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : ((json['data'] as Array<any>).map(UserDataFromJSON)),
+        'data': !exists(json, 'data') ? undefined : ((json['data'] as Array<any>).map(UserSchemaFromJSON)),
     };
 }
 
@@ -82,7 +82,7 @@ export function UserListModelToJSON(value?: UserListModel | null): any {
         
         'success': value.success,
         'message': value.message,
-        'data': value.data === undefined ? undefined : ((value.data as Array<any>).map(UserDataToJSON)),
+        'data': value.data === undefined ? undefined : ((value.data as Array<any>).map(UserSchemaToJSON)),
     };
 }
 
