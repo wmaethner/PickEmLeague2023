@@ -64,15 +64,6 @@ export function AuthProvider(props) {
   const { setCurrentUser, clearCurrentUser } = useUser();
 
   const handleLogin = async (username: string, password: string): Promise<boolean> => {
-    // console.log("handle login")
-    // useLogin(username, password).then(loginResult => {
-    //   console.log(`login result`);
-    //   console.log(loginResult);
-    //   handleAuthResult(loginResult).then(() => {
-    //     setCurrentUser();
-    //     setLoggedIn(true);
-    //   })
-    // });
     useLogin(username, password).then(authCallback);
     return true;
   }
@@ -90,10 +81,13 @@ export function AuthProvider(props) {
   }
 
   const authCallback = (result: AuthModel) => {
-    handleAuthResult(result).then(() => {
-      setCurrentUser();
-      setLoggedIn(true);
-    })
+    handleAuthResult(result)
+      .then(loggedIn => {
+        if (loggedIn) {
+          setCurrentUser();
+          setLoggedIn(true);
+        }
+      })
   }
 
   const handleLogout = async () => {

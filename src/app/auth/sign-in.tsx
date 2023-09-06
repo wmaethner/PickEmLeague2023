@@ -12,7 +12,7 @@ export default function SignIn() {
   const { logs, addLog, clearLogs } = useLogging();
 
   useEffect(() => {
-    addLog("sign in use effect");
+    // addLog("sign in use effect");
   }, [])
 
   const handleClear = () => {
@@ -20,17 +20,14 @@ export default function SignIn() {
   }
 
   const handleLogin = async () => {
-    await addLog(`Attempting login ${username} - ${password}`);
-    // await signIn(username, password);
-    console.log("Logging in");
-    await signIn("test", "test");
+    await signIn(username, password);
   }
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
       {
         errorMessage &&
-        <Text style={[styles.label, { backgroundColor: 'red' }]}>{errorMessage}</Text>
+        <Text style={[styles.text, { backgroundColor: 'red' }]}>{errorMessage}</Text>
       }
       <Text style={styles.title}>Pick Em League 2023</Text>
       <View style={styles.container}>
