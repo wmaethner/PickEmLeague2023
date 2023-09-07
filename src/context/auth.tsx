@@ -70,8 +70,6 @@ export function AuthProvider(props) {
 
   const handleRegister = async (registerData: RegisterData): Promise<boolean> => {
     useRegister(registerData).then(loginResult => {
-      console.log(`login result`);
-      console.log(loginResult);
       handleAuthResult(loginResult).then(() => {
         setCurrentUser();
         setLoggedIn(true);

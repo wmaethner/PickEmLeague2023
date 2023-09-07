@@ -13,6 +13,12 @@
     "production": {}
   },
   "submit": {
-    "production": {}
-  }
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "/Users/willmaethner/Documents/GitHub/PickEmLeague2023_Mobile/.expo/pc-api-4797238269583451527-912-6bf25324216b.json",
+        "track": "internal",
+        "releaseStatus": "draft"
+      }
+    }
+  },
 }

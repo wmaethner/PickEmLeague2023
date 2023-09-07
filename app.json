@@ -31,7 +31,9 @@
         "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.wmaethner.PickEmLeague2023_Mobile"
+      "permissions": ["INTERNET"],
+      "package": "com.wmaethner.PickEmLeague2023_Mobile",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"

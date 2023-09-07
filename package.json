@@ -16,7 +16,9 @@
     "replace": "replace-in-file --configFile=./replace.json --isRegex",
     "build": "eas build --platform all",
     "build-ios": "eas build --platform ios",
-    "submit-ios": "eas submit -p ios"
+    "build-android": "eas build --platform android",
+    "submit-ios": "eas submit -p ios",
+    "submit-android": "eas submit -p android"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.18.2",
