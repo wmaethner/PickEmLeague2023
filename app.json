@@ -33,7 +33,7 @@
       },
       "permissions": ["INTERNET"],
       "package": "com.wmaethner.PickEmLeague2023_Mobile",
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
