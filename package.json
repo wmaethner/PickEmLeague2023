@@ -50,7 +50,8 @@
     "react-native-storage": "^1.0.1",
     "react-native-table-component": "^1.2.2",
     "replace-in-file": "^7.0.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "expo-build-properties": "~0.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.22.11",
