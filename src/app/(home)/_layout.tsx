@@ -21,8 +21,10 @@ export default function Layout() {
     console.log(`Userdata admin ${UserData?.admin}`);
   }, [])
 
+  // TODO: Add admin tabs (edit games)
+  // TODO: Add user profile page/tab
   const tabView = () => (
-    <View style={{flex:1}}>
+    <View style={{ flex: 1 }}>
       <Tabs
         screenOptions={{
           unmountOnBlur: true,
@@ -42,7 +44,7 @@ export default function Layout() {
             // marginBottom: 1,s
           },
         }}>
-        <Tabs.Screen 
+        <Tabs.Screen
           name='home'
           options={{
             tabBarLabel: 'Home',
@@ -51,7 +53,7 @@ export default function Layout() {
             ),
           }}
         />
-        <Tabs.Screen 
+        <Tabs.Screen
           name='picks'
           options={{
             tabBarLabel: 'Picks',
@@ -60,13 +62,23 @@ export default function Layout() {
             ),
           }}
         />
-        <Tabs.Screen 
+        <Tabs.Screen
           name='season'
           options={{
             tabBarLabel: 'Season',
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="podium" color={color} size={size} />
             ),
+          }}
+        />
+        <Tabs.Screen
+          name="games"
+          options={{
+            tabBarLabel: 'Games',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="book" color={color} size={size} />
+            ),
+            href: (UserData.admin ? 'games' : null)
           }}
         />
         <Tabs.Screen

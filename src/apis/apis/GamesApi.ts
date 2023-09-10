@@ -38,7 +38,7 @@ export interface GetGameByWeekAndTeamRequest {
 }
 
 export interface GetGamesByWeekRequest {
-    week: string;
+    week: number;
 }
 
 export interface PostGameListRequest {

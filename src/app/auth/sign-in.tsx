@@ -6,21 +6,26 @@ import { useLogging } from '../../context/logging';
 import { styles } from '../../utils/styles';
 
 export default function SignIn() {
-  const [username, setUsername] = useState('');
-  const [password, setpassword] = useState('');
-  const { signIn, errorMessage } = useAuth();
+  const { signIn, errorMessage, username, password, saveCredentials } = useAuth();
+  const [usernameVal, setUsername] = useState(username);
+  const [passwordVal, setpassword] = useState(password);
+  const [saveCredentialsVal, setSaveCredentials] = useState(false);
+  
   const { logs, addLog, clearLogs } = useLogging();
 
+
   useEffect(() => {
-    // addLog("sign in use effect");
-  }, [])
+    setUsername(username);
+    setpassword(password);
+    setSaveCredentials(saveCredentials);
+  }, [username, password, saveCredentials])
 
   const handleClear = () => {
     clearLogs();
   }
 
   const handleLogin = async () => {
-    await signIn(username, password);
+    await signIn(usernameVal, passwordVal, true);
   }
 
   return (
@@ -35,7 +40,7 @@ export default function SignIn() {
         <TextInput
           style={[styles.input, { flex: 4 }]}
           onChangeText={setUsername}
-          value={username}
+          value={usernameVal}
           autoCapitalize='none'
           autoComplete='username'
         />
@@ -45,7 +50,7 @@ export default function SignIn() {
         <TextInput
           style={[styles.input, { flex: 4 }]}
           onChangeText={setpassword}
-          value={password}
+          value={passwordVal}
           autoCapitalize='none'
           autoComplete='current-password'
           secureTextEntry={true}

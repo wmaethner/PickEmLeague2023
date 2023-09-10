@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { Row, Table } from 'react-native-reanimated-table';
-import { SummarySchema } from '../../apis';
+import { GameSchema, SummarySchema } from '../../apis';
 import AppBackground from '../../components/appBackground';
 import WeekSelector from '../../components/weekSelector';
+import { useGetGames } from '../../hooks/games/useGetGames';
 import { useGetWeekSummaries } from '../../hooks/useGetWeekSummaries';
 import { BlueGrey } from '../../utils/colors';
 import { styles } from '../../utils/styles';
@@ -12,13 +13,15 @@ import { styles } from '../../utils/styles';
 export default function Home() {
   const [summaries, setSummaries] = useState<SummarySchema[]>([]);
   const [week, setWeek] = useState(1);
+  const [games, setGames] = useState<GameSchema[]>([]);
 
   useEffect(() => {
-    async function GetSummaries() {
+    async function GetData() {
       setSummaries(await useGetWeekSummaries(week));
+      setGames(await useGetGames(week));
     }
 
-    GetSummaries();
+    GetData();
   }, [week])
 
   const header = () => [
@@ -30,7 +33,17 @@ export default function Home() {
     return [windowWidth * 0.1, windowWidth * 0.5, windowWidth * 0.2, windowWidth * 0.2]
   }
 
-  const mapSummary = (summary: SummarySchema, index: number) => [index + 1, summary.user.username, summary.score, summary.correctPicks]
+  const gamesPlayed = () => {
+    return games.filter(g => g.result !== 1).length;
+  }
+
+  const mapSummary = (summary: SummarySchema, index: number) =>
+    [
+      index + 1,
+      summary.user.username,
+      summary.score,
+      `${summary.correctPicks}/${gamesPlayed()}`
+    ]
 
   return (
     <AppBackground>
@@ -51,7 +64,7 @@ export default function Home() {
                         data={mapSummary(summary, index)}
                         widthArr={widths()}
                         style={{ height: 30 }}
-                        textStyle={{ color: 'black' }}
+                        textStyle={{ color: 'black', textAlign: 'center' }}
                       />
                     ))}
                   </Table>

@@ -1,5 +1,7 @@
 import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+
 
 // import { AuthResult } from '../apis/models/AuthResult';
 import { AuthModel } from '../apis';
@@ -10,12 +12,15 @@ import { useLogging } from './logging';
 import { useUser } from './user';
 
 export type AuthContextData = {
-  signIn: (username: string, password: string) => Promise<boolean>;
+  signIn: (username: string, password: string, saveCredentials: boolean) => Promise<boolean>;
   signOut: () => void;
   register: (registerData: RegisterData) => Promise<boolean>;
   loggedIn: boolean;
   // authData: string;
   errorMessage: string;
+  username: string;
+  password: string;
+  saveCredentials: boolean;
 }
 
 const AuthContext = createContext<AuthContextData>(null);
@@ -37,7 +42,6 @@ function useProtectedRoute(loggedIn: boolean) {
 
     const inAuthGroup = segments[0] === "auth";
     const ready = (UserData && loggedIn);
-    console.log(`Ready ${ready}`);
 
     // This structure may differ from other implementations. 
     if (ready && segments.length === 0) {
@@ -58,13 +62,38 @@ function useProtectedRoute(loggedIn: boolean) {
 
 export function AuthProvider(props) {
   const [loggedIn, setLoggedIn] = useState(false);
-  // const [authData, setAuth] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const { addLog } = useLogging();
   const { setCurrentUser, clearCurrentUser } = useUser();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [saveCredentials, setSaveCredentials] = useState(false);
 
-  const handleLogin = async (username: string, password: string): Promise<boolean> => {
-    useLogin(username, password).then(authCallback);
+  useEffect(() => {
+    async function GetCredentials() {
+      const username = await SecureStore.getItemAsync('username');
+      const password = await SecureStore.getItemAsync('password');
+      const saveCredentials = await SecureStore.getItemAsync('saveCredentials');
+      console.log(`Getting credentials ${username} - ${password}`);
+      setUsername(username ? username : '');
+      setPassword(password ? password : '');
+      setSaveCredentials(saveCredentials ? true : false);
+    }
+
+    GetCredentials();
+  }, [])
+
+  const handleLogin = async (username: string, password: string, saveCredentials: boolean = false): Promise<boolean> => {
+    useLogin(username, password)
+      .then(async result => {
+        authCallback(result);
+        
+        if (result.success && saveCredentials) {
+          await SecureStore.setItemAsync('username', username);
+          await SecureStore.setItemAsync('password', password);
+          await SecureStore.setItemAsync('saveCredentials', 'true');
+        }
+      });
     return true;
   }
 
@@ -97,12 +126,9 @@ export function AuthProvider(props) {
 
   const handleAuthResult = async (result: AuthModel): Promise<boolean> => {
     if (result?.success) {
-      // setAuth(result.data.token);
-      console.log(`setting token ${result.data.token}`);
       await storage.save({ key: 'bearerToken', data: result.data.token })
       setErrorMessage(null);
     } else {
-      // setAuth(null);loggedIn
       setErrorMessage(result.message);
     }
     return result?.success;
@@ -113,11 +139,14 @@ export function AuthProvider(props) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: (username: string, password: string) => handleLogin(username, password),
+        signIn: (username: string, password: string, saveCredentials: boolean = false) => handleLogin(username, password, saveCredentials),
         signOut: handleLogout,
         register: (registerData: RegisterData) => handleRegister(registerData),
         loggedIn,
-        errorMessage
+        errorMessage,
+        username,
+        password,
+        saveCredentials
       }}>
       {props.children}
     </AuthContext.Provider>
