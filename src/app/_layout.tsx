@@ -1,5 +1,6 @@
 import { Slot } from 'expo-router';
 import { SafeAreaView } from 'react-native';
+import { MenuProvider } from 'react-native-popup-menu';
 import AppBackground from '../components/appBackground';
 import { AuthProvider } from '../context/auth';
 import { LoggingProvider } from '../context/logging';
@@ -11,11 +12,13 @@ export default function Root() {
     <LoggingProvider>
       <UserProvider>
         <AuthProvider>
-          <AppBackground>
-            <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
-              <Slot />
-            </SafeAreaView>
-          </AppBackground>
+          <MenuProvider>
+            <AppBackground>
+              <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
+                <Slot />
+              </SafeAreaView>
+            </AppBackground>
+          </MenuProvider>
         </AuthProvider>
       </UserProvider>
     </LoggingProvider>

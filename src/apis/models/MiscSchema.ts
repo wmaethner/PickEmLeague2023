@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { VersionSchema } from './VersionSchema';
+import {
+    VersionSchemaFromJSON,
+    VersionSchemaFromJSONTyped,
+    VersionSchemaToJSON,
+} from './VersionSchema';
+
 /**
  * 
  * @export
@@ -25,6 +32,18 @@ export interface MiscSchema {
      * @memberof MiscSchema
      */
     started?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof MiscSchema
+     */
+    currentWeek?: number;
+    /**
+     * 
+     * @type {VersionSchema}
+     * @memberof MiscSchema
+     */
+    versions?: VersionSchema;
 }
 
 /**
@@ -47,6 +66,8 @@ export function MiscSchemaFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'started': !exists(json, 'started') ? undefined : json['started'],
+        'currentWeek': !exists(json, 'current_week') ? undefined : json['current_week'],
+        'versions': !exists(json, 'versions') ? undefined : VersionSchemaFromJSON(json['versions']),
     };
 }
 
@@ -60,6 +81,8 @@ export function MiscSchemaToJSON(value?: MiscSchema | null): any {
     return {
         
         'started': value.started,
+        'current_week': value.currentWeek,
+        'versions': VersionSchemaToJSON(value.versions),
     };
 }
 

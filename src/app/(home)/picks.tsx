@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { GamePickSchema, UserSchema } from '../../apis';
+import { UserSchema } from '../../apis';
 import AppBackground from '../../components/appBackground';
 import PicksTable from '../../components/picksTable';
 import WeekSelector from '../../components/weekSelector';
 import { useUser } from '../../context/user';
-import { useGetGamePicks } from '../../hooks/useGetGamePicks';
+import { useGetMisc } from '../../hooks/useGetMisc';
 import { useGetUsers } from '../../hooks/useGetUsers';
+import { BlueGrey } from '../../utils/colors';
 import { styles } from '../../utils/styles';
 
 export default function Picks() {
+  const [loading, setLoading] = useState(true);
   const [week, setWeek] = useState(1);
-  const [picks, setPicks] = useState<GamePickSchema[]>([]);
-  const [changed, setChanged] = useState(true);
   const { UserData } = useUser();
-  const [time, setTime] = useState(Date.now());
   const [ignoreLocked, setIgnoreLocked] = useState(false);
   const [users, setUsers] = useState<UserSchema[]>([]);
   const [showAdmin, setShowAdmin] = useState(false);
@@ -23,42 +22,17 @@ export default function Picks() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    async function GetWeek() {
+      setWeek((await useGetMisc()).currentWeek);
+      setLoading(false);
+    }
     async function GetUsers() {
       setUsers(await useGetUsers());
     }
 
     GetUsers();
-  })
-
-  useEffect(() => {
-    // update every minute
-    const interval = setInterval(() => setTime(Date.now()), 60000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [time]);
-
-  useEffect(() => {
-    async function GetPicks() {
-      console.log(userId());
-      setPicks(await useGetGamePicks(week, userId()));
-    }
-
-    if (changed) {
-      console.log("Change");
-      GetPicks();
-      setChanged(false);
-    }
-  }, [week, changed])
-
-  useEffect(() => {
-    async function GetPicks() {
-      console.log(userId());
-      setPicks(await useGetGamePicks(week, userId()));
-    }
-
-    GetPicks();
-  }, [impersonatedUser])
+    GetWeek();
+  }, [])
 
   const userId = () => {
     return impersonatedUser ? impersonatedUser : UserData.id
@@ -66,7 +40,6 @@ export default function Picks() {
 
   const handleWeekChange = (week: number) => {
     setWeek(week);
-    setChanged(true);
   }
 
   const items = () => {
@@ -78,51 +51,68 @@ export default function Picks() {
     ))
   }
 
+  const loadingView = () => (
+    <View style={styles.viewRow}>
+      <View style={styles.viewColumn}>
+        <View style={{ backgroundColor: BlueGrey.BlueGrey500, padding: 10, borderRadius: 10, alignItems: 'center' }}>
+          <Text style={styles.title}>LOADING...</Text>
+        </View>
+      </View>
+    </View>
+  )
+
+  const picksView = () => (
+    <View style={styles.viewRow}>
+      <View style={[styles.viewColumn]}>
+        <WeekSelector week={week} setWeek={handleWeekChange} />
+        <PicksTable week={week} userId={userId()} ignoreLocked={ignoreLocked} />
+        {
+          UserData.admin &&
+          <View style={styles.viewRow}>
+            <View style={styles.viewColumn}>
+              <Pressable style={styles.button} onPress={e => setShowAdmin(!showAdmin)}>
+                <Text style={[styles.text, { color: 'white' }]}>Admin {showAdmin ? 'true' : 'false'}</Text>
+              </Pressable>
+              {
+                showAdmin &&
+                <>
+                  <View style={styles.viewRow}>
+                    <View style={styles.viewColumn}>
+                      <DropDownPicker
+                        open={open}
+                        value={impersonatedUser}
+                        items={items()}
+                        setOpen={setOpen}
+                        setValue={setImpersonatedUser}
+                      />
+                    </View>
+                    <View style={styles.viewColumn}>
+                      <Pressable style={styles.button} onPress={e => setImpersonatedUser(null)}>
+                        <Text style={[styles.text, { color: 'white' }]}>Clear</Text>
+                      </Pressable>
+                    </View>
+                    <View style={styles.viewColumn}>
+                      <Pressable style={styles.button} onPress={e => setIgnoreLocked(!ignoreLocked)}>
+                        <Text style={[styles.text, { color: 'white' }]}>{ignoreLocked ? "Lock" : "Unlock"}</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                </>
+              }
+            </View>
+          </View>
+        }
+      </View>
+    </View>
+  )
+
 
   return (
     <AppBackground>
-      <View style={styles.viewRow}>
-        <View style={[styles.viewColumn]}>
-          <WeekSelector week={week} setWeek={handleWeekChange} />
-          <PicksTable week={week} userId={userId()} ignoreLocked={ignoreLocked} />
-          {
-            UserData.admin &&
-            <View style={styles.viewRow}>
-              <View style={styles.viewColumn}>
-                <Pressable style={styles.button} onPress={e => setShowAdmin(!showAdmin)}>
-                  <Text style={[styles.text, { color: 'white' }]}>Admin {showAdmin ? 'true' : 'false'}</Text>
-                </Pressable>
-                {
-                  showAdmin &&
-                  <>
-                    <View style={styles.viewRow}>
-                      <View style={styles.viewColumn}>
-                        <DropDownPicker
-                          open={open}
-                          value={impersonatedUser}
-                          items={items()}
-                          setOpen={setOpen}
-                          setValue={setImpersonatedUser}
-                        />
-                      </View>
-                      <View style={styles.viewColumn}>
-                        <Pressable style={styles.button} onPress={e => setImpersonatedUser(null)}>
-                          <Text style={[styles.text, { color: 'white' }]}>Clear</Text>
-                        </Pressable>
-                      </View>
-                      <View style={styles.viewColumn}>
-                        <Pressable style={styles.button} onPress={e => setIgnoreLocked(!ignoreLocked)}>
-                          <Text style={[styles.text, { color: 'white' }]}>{ignoreLocked ? "Lock" : "Unlock"}</Text>
-                        </Pressable>
-                      </View>
-                    </View>
-                  </>
-                }
-              </View>
-            </View>
-          }
-        </View>
-      </View>
+      {
+        loading ?
+          loadingView() : picksView()
+      }
     </AppBackground>
   )
 }

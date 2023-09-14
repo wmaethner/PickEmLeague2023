@@ -28,7 +28,7 @@ export default function WeekSelector(props: WeekSelectorProps) {
         </Pressable>
       </View>
       <View style={styles.viewColumn}>
-        <Text style={styles.text}>Week {props.week}</Text>
+        <Text style={styles.title}>Week {props.week}</Text>
       </View>
       <View style={styles.viewColumn}>
         <Pressable style={styles.button} onPress={e => handleWeekChange(1)}>

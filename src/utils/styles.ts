@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { BlueGrey } from "./colors";
 
 export const styles = StyleSheet.create({
   containerEven: {
@@ -33,6 +34,14 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: 'gray',
+  },
+  buttonCircle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    backgroundColor: BlueGrey.BlueGrey50
   },
   label: {
     fontSize: 16,

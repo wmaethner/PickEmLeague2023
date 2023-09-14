@@ -17,16 +17,32 @@ import * as runtime from '../runtime';
 import type {
   UserListModel,
   UserModel,
+  UserPassword,
+  UserSchema,
 } from '../models';
 import {
     UserListModelFromJSON,
     UserListModelToJSON,
     UserModelFromJSON,
     UserModelToJSON,
+    UserPasswordFromJSON,
+    UserPasswordToJSON,
+    UserSchemaFromJSON,
+    UserSchemaToJSON,
 } from '../models';
 
 export interface GetUserByIdRequest {
     id: number;
+}
+
+export interface PutUpdateUserPasswordRequest {
+    id: number;
+    payload: UserPassword;
+}
+
+export interface PutUserByIdRequest {
+    id: number;
+    payload: UserSchema;
 }
 
 /**
@@ -88,7 +104,6 @@ export class UsersApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrieve a list of users
      */
     async getUserByIdRaw(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
@@ -110,7 +125,6 @@ export class UsersApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrieve a list of users
      */
     async getUserById(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserModel> {
         const response = await this.getUserByIdRaw(requestParameters, initOverrides);
@@ -141,6 +155,74 @@ export class UsersApi extends runtime.BaseAPI {
     async getUserList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserListModel> {
         const response = await this.getUserListRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async putUpdateUserPasswordRaw(requestParameters: PutUpdateUserPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling putUpdateUserPassword.');
+        }
+
+        if (requestParameters.payload === null || requestParameters.payload === undefined) {
+            throw new runtime.RequiredError('payload','Required parameter requestParameters.payload was null or undefined when calling putUpdateUserPassword.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/users/password/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UserPasswordToJSON(requestParameters.payload),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async putUpdateUserPassword(requestParameters: PutUpdateUserPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putUpdateUserPasswordRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async putUserByIdRaw(requestParameters: PutUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling putUserById.');
+        }
+
+        if (requestParameters.payload === null || requestParameters.payload === undefined) {
+            throw new runtime.RequiredError('payload','Required parameter requestParameters.payload was null or undefined when calling putUserById.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UserSchemaToJSON(requestParameters.payload),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async putUserById(requestParameters: PutUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putUserByIdRaw(requestParameters, initOverrides);
     }
 
 }

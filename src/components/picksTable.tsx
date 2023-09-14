@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { Pressable, PressableProps, Text, TouchableOpacity, View } from 'react-native';
 import DraggableFlatList, { DragEndParams, RenderItemParams, ScaleDecorator } from 'react-native-draggable-flatlist';
 
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { GamePickSchema, GameSchema } from '../apis';
-import { useUser } from '../context/user';
 import { useGetGamePicks } from '../hooks/useGetGamePicks';
 import { useUpdateGamePick } from '../hooks/useUpdateGamePick';
 import { useUpdateGamePickOrder } from '../hooks/useUpdateGamePickOrder';
@@ -20,9 +20,7 @@ export interface PicksTableProps {
 export default function PicksTable(props: PicksTableProps) {
   const [picks, setPicks] = useState<GamePickSchema[]>([]);
   const [changed, setChanged] = useState(true);
-  const { UserData } = useUser();
   const [time, setTime] = useState(Date.now());
-  // const [ignoreLocked, setIgnoreLocked] = useState(false);
 
   useEffect(() => {
     // update every minute
@@ -42,7 +40,6 @@ export default function PicksTable(props: PicksTableProps) {
   }, [props.week, props.userId, changed])
 
   const handleTeamPick = async (id: number, home: boolean) => {
-    console.log("Handle team pick")
     let updatedPick = picks.find(pick => pick.id == id);
     updatedPick.pick = home ? 2 : 3;
     await useUpdateGamePick(updatedPick);
@@ -110,14 +107,18 @@ export default function PicksTable(props: PicksTableProps) {
     ) : (
       pickedTeam ? Blue.Blue700 : 'white'
     );
+    const borderColor = correctPick(pick) ? 'green' : 'red';
+    const borderWidth = (gameOver(pick.game) && pickedTeam) ? 3 : 0;
     return {
       disabled: disableRow(pick.game),
       style: [
         styles.button,
         styles.noPadding,
         {
-          flex: 2,
-          backgroundColor: backgroundColor
+          flex: 3,
+          backgroundColor: backgroundColor,
+          borderColor: borderColor,
+          borderWidth: borderWidth
         }
       ]
     }
@@ -125,19 +126,19 @@ export default function PicksTable(props: PicksTableProps) {
 
   const textColor = (gamePick: GamePickSchema) => {
     if (disableRow(gamePick.game)) {
-      if (gameOver(gamePick.game)) {
-        if (correctPick(gamePick)) {
-          return 'green';
-        } else {
-          return 'red';
-        }
-      } else {
-        return 'white';
-      }
+      return 'lightgray';
     } else {
       return 'black';
     }
   }
+
+  const icon = (gamePick: GamePickSchema) => (
+    gameOver(gamePick.game) ?
+      (correctPick(gamePick) ?
+        <Ionicons name="md-checkmark-circle" size={32} color="green" /> :
+        <Ionicons name="md-close-circle" size={32} color="red" />)
+      : <></>
+  )
 
   const renderItem = ({ item, drag, isActive }: RenderItemParams<GamePickSchema>) => {
     return (
@@ -162,14 +163,15 @@ export default function PicksTable(props: PicksTableProps) {
           <View style={styles.viewRow}>
             <Text style={[styles.text, { flex: 1, color: textColor(item) }]}>{item.amount}</Text>
             <Pressable {...buttonProps(item, false)} onPress={e => handleTeamPick(item.id, false)}>
-              {/* <Text style={[styles.text, { color: item.pick == 3 ? 'white' : 'black' }]}>{item.game.awayTeam.name}</Text> */}
               <Text style={[styles.text, { color: textColor(item) }]}>{item.game.awayTeam.name}</Text>
             </Pressable>
             <Text style={[styles.text, { color: textColor(item) }]}>@</Text>
             <Pressable {...buttonProps(item, true)} onPress={e => handleTeamPick(item.id, true)}>
-              {/* <Text style={[styles.text, { color: item.pick == 2 ? 'white' : 'black' }]}>{item.game.homeTeam.name}</Text> */}
               <Text style={[styles.text, { color: textColor(item) }]}>{item.game.homeTeam.name}</Text>
             </Pressable>
+            <View style={[styles.viewColumn, { flex: 1 }]}>
+              {icon(item)}
+            </View>
           </View>
         </TouchableOpacity>
       </ScaleDecorator>

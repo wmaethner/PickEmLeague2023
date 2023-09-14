@@ -2,6 +2,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import Header from '../../components/header';
 import { useUser } from '../../context/user';
 import { useGetMisc } from '../../hooks/useGetMisc';
 import { BlueGrey } from '../../utils/colors';
@@ -17,8 +18,6 @@ export default function Layout() {
       await setStarted(misc.started);
     }
     GetStarted();
-
-    console.log(`Userdata admin ${UserData?.admin}`);
   }, [])
 
   // TODO: Add admin tabs (edit games)
@@ -31,7 +30,6 @@ export default function Layout() {
           tabBarActiveTintColor: BlueGrey.BlueGrey50,
           tabBarActiveBackgroundColor: BlueGrey.BlueGrey500,
           tabBarInactiveTintColor: BlueGrey.BlueGrey500,
-          headerShown: false,
           tabBarStyle: {
             height: 40,
             borderWidth: 1,
@@ -41,8 +39,8 @@ export default function Layout() {
           tabBarLabelStyle: {
             fontSize: 12,
             fontWeight: "bold",
-            // marginBottom: 1,s
           },
+          header: () => <Header />
         }}>
         <Tabs.Screen
           name='home'
@@ -50,7 +48,7 @@ export default function Layout() {
             tabBarLabel: 'Home',
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="home" color={color} size={size} />
-            ),
+            )
           }}
         />
         <Tabs.Screen

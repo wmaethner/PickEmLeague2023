@@ -15,12 +15,19 @@
 
 import * as runtime from '../runtime';
 import type {
+  PickStatusesModel,
   SummariesModel,
 } from '../models';
 import {
+    PickStatusesModelFromJSON,
+    PickStatusesModelToJSON,
     SummariesModelFromJSON,
     SummariesModelToJSON,
 } from '../models';
+
+export interface GetWeekPickStatusRequest {
+    week: number;
+}
 
 export interface GetWeekSummaryRequest {
     week: number;
@@ -52,6 +59,34 @@ export class SummariesApi extends runtime.BaseAPI {
      */
     async getSeasonSummary(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SummariesModel> {
         const response = await this.getSeasonSummaryRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getWeekPickStatusRaw(requestParameters: GetWeekPickStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PickStatusesModel>> {
+        if (requestParameters.week === null || requestParameters.week === undefined) {
+            throw new runtime.RequiredError('week','Required parameter requestParameters.week was null or undefined when calling getWeekPickStatus.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/summaries/week_pick_status/{week}`.replace(`{${"week"}}`, encodeURIComponent(String(requestParameters.week))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PickStatusesModelFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async getWeekPickStatus(requestParameters: GetWeekPickStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PickStatusesModel> {
+        const response = await this.getWeekPickStatusRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
