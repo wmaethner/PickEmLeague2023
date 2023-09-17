@@ -7,6 +7,8 @@ import { useGetGames } from "../../hooks/games/useGetGames";
 import { Blue, BlueGrey } from "../../utils/colors";
 import { gameStarted } from "../../utils/extensions/gameExtensions";
 import { styles } from "../../utils/styles";
+import Column from "../layouts/column";
+import Row from "../layouts/row";
 import PlayerPicksModal from "./playerPicksModal";
 
 export interface PlayerPicksProps {
@@ -54,33 +56,33 @@ export default function PlayerPicks(props: PlayerPicksProps) {
 
   return (
     <View style={[styles.viewRow, { flex: 10, alignItems: 'flex-start', justifyContent: 'space-evenly' }]}>
-      <View style={styles.viewColumn}>
-        <View style={styles.viewRow}>
+      <Column>
+        <Row>
           <Text style={[styles.text, { fontSize: 14 }]}>Click row to see who picked who</Text>
-        </View>
+        </Row>
         {
           startedGames().map(game => (
-            <View key={game.id} style={[styles.viewRow, { backgroundColor: BlueGrey.BlueGrey50, justifyContent: 'center', borderWidth: 1, margin: 0, padding: 0 }]}>
-              <Pressable 
+            <Row key={game.id} style={{ backgroundColor: BlueGrey.BlueGrey50, borderWidth: 1, margin: 0, padding: 0 }}>
+              <Pressable
                 onPress={() => {
                   setPicksModalGame(game);
                   setPlayerPicksModalOpen(true);
-                }} 
+                }}
                 style={{ flexDirection: 'row' }}>
-                <View style={[styles.viewColumn, { flex: 1 }]}>
+                <Column>
                   <Text style={[styles.text, styles.darkText, { fontSize: 14 }]}> {game.awayTeam.name}</Text>
-                </View>
-                <View style={styles.viewColumn} onLayout={handleLayout}>
+                </Column>
+                <Column onLayout={handleLayout}>
                   <Progress.Bar progress={(totalLength - picksForTeam(game, false).length) / totalLength} height={10} width={width} borderRadius={0} color="white" unfilledColor={Blue.Blue500} borderColor="black" />
-                </View>
-                <View style={styles.viewColumn} onLayout={handleLayout}>
+                </Column>
+                <Column onLayout={handleLayout}>
                   <Progress.Bar progress={picksForTeam(game, true).length / totalLength} height={10} width={width} borderRadius={0} unfilledColor="white" color={Blue.Blue500} borderColor="black" />
-                </View>
-                <View style={[styles.viewColumn, { flex: 1 }]}>
+                </Column>
+                <Column>
                   <Text style={[styles.text, styles.darkText, { fontSize: 14 }]}>{game.homeTeam.name}</Text>
-                </View>
+                </Column>
               </Pressable>
-            </View>
+            </Row>
           ))
 
         }
@@ -89,7 +91,7 @@ export default function PlayerPicks(props: PlayerPicksProps) {
           close={() => setPlayerPicksModalOpen(false)}
           game={picksModalGame}
           picks={picksForGame(picksModalGame)} />
-      </View>
+      </Column>
     </View>
   )
 }

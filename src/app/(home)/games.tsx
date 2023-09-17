@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Pressable, PressableProps, Text, View } from 'react-native';
+import { Pressable, PressableProps, Text } from 'react-native';
 import { GameSchema } from '../../apis';
 import AppBackground from '../../components/appBackground';
+import Container from '../../components/layouts/container';
+import Row from '../../components/layouts/row';
 import WeekSelector from '../../components/weekSelector';
 import { useGetGames } from '../../hooks/games/useGetGames';
 import { useUpdateGame } from '../../hooks/games/useUpdateGame';
@@ -9,7 +11,7 @@ import { Blue } from '../../utils/colors';
 import { styles } from '../../utils/styles';
 
 
-export default function Gamges() {
+export default function Games() {
   const [week, setWeek] = useState(1);
   const [games, setGames] = useState<GameSchema[]>([]);
   const [changed, setChanged] = useState(true);
@@ -54,24 +56,22 @@ export default function Gamges() {
 
   return (
     <AppBackground>
-      <View style={styles.viewRow}>
-        <View style={[styles.viewColumn]}>
-          <WeekSelector week={week} setWeek={handleWeekChange} />
-          {
-            games.map(game => (
-              <View key={game.id} style={styles.viewRow}>
-                <Pressable {...buttonProps(game, false)} onPress={e => handleTeamPick(game.id, false)}>
-                  <Text style={[styles.text, { color: game.result == 3 ? 'white' : 'black' }]}>{game.awayTeam.name}</Text>
-                </Pressable>
-                <Text style={[styles.text]}>@</Text>
-                <Pressable {...buttonProps(game, true)} onPress={e => handleTeamPick(game.id, true)}>
-                  <Text style={[styles.text, { color: game.result == 2 ? 'white' : 'black' }]}>{game.homeTeam.name}</Text>
-                </Pressable>
-              </View>
-            ))
-          }
-        </View>
-      </View>
+      <Container>
+        <WeekSelector week={week} setWeek={handleWeekChange} />
+        {
+          games.map(game => (
+            <Row key={game.id}>
+              <Pressable {...buttonProps(game, false)} onPress={e => handleTeamPick(game.id, false)}>
+                <Text style={[styles.text, { color: game.result == 3 ? 'white' : 'black' }]}>{game.awayTeam.name}</Text>
+              </Pressable>
+              <Text style={[styles.text]}>@</Text>
+              <Pressable {...buttonProps(game, true)} onPress={e => handleTeamPick(game.id, true)}>
+                <Text style={[styles.text, { color: game.result == 2 ? 'white' : 'black' }]}>{game.homeTeam.name}</Text>
+              </Pressable>
+            </Row>
+          ))
+        }
+      </Container>
     </AppBackground>
   )
 }

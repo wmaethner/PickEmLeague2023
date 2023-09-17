@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Modal, Platform, Pressable, Text, View } from "react-native";
+import { Platform, Text } from "react-native";
 import { VersionSchema } from "../apis";
 import { useGetMisc } from "../hooks/useGetMisc";
-import { BlueGrey } from "../utils/colors";
 import { styles } from "../utils/styles";
 import { versionUpdateAvailable } from "../utils/version_update_available";
+import Row from "./layouts/row";
+import ModalWrapper from "./modalWrapper";
 
 export interface VersionModalProps {
   open: boolean;
@@ -34,31 +35,22 @@ export default function VersionModal(props: VersionModalProps) {
   }
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={props.open}
-      onRequestClose={props.close}
+    <ModalWrapper
+      open={props.open}
+      close={props.close}
     >
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View style={{ backgroundColor: BlueGrey.BlueGrey500, padding: 20, borderRadius: 10 }}>
-          {
-            updateAvailable &&
-            <View>
-              <Text style={[styles.text, { fontSize: 20 }]}>**Client Update Available**</Text>
-              <Text style={[styles.text, { fontSize: 15 }]}>{updateDescription()}</Text>
-              <Text />
-            </View>
-          }
-          <View style={{ marginBottom: 20 }}>
-            <Text style={styles.text}>Client Version: {Platform.OS == 'ios' ? versions?.ios : versions?.android}</Text>
-            <Text style={styles.text}>Server Version: {versions?.server}</Text>
-          </View>
-          <Pressable style={styles.button} onPress={props.close}>
-            <Text style={styles.text}>Close</Text>
-          </Pressable>
-        </View>
-      </View>
-    </Modal>
+      {
+        updateAvailable &&
+        <Row>
+          <Text style={[styles.text, { fontSize: 20 }]}>**Client Update Available**</Text>
+          <Text style={[styles.text, { fontSize: 15 }]}>{updateDescription()}</Text>
+          <Text />
+        </Row>
+      }
+      <>
+        <Text style={styles.text}>Client Version: {Platform.OS == 'ios' ? versions?.ios : versions?.android}</Text>
+        <Text style={styles.text}>Server Version: {versions?.server}</Text>
+      </>
+    </ModalWrapper>
   )
 }

@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { UserSchema } from '../../apis';
 import AppBackground from '../../components/appBackground';
 import PicksTable from '../../components/game_picks/picksTable';
+import Column from '../../components/layouts/column';
+import Container from '../../components/layouts/container';
+import Row from '../../components/layouts/row';
 import Loading from '../../components/loading';
 import WeekSelector from '../../components/weekSelector';
 import { useUser } from '../../context/user';
@@ -52,48 +55,44 @@ export default function Picks() {
   }
 
   const picksView = () => (
-    <View style={styles.viewRow}>
-      <View style={[styles.viewColumn]}>
-        <WeekSelector week={week} setWeek={handleWeekChange} />
-        <PicksTable week={week} userId={userId()} ignoreLocked={ignoreLocked} />
-        {
-          UserData.admin &&
-          <View style={styles.viewRow}>
-            <View style={styles.viewColumn}>
-              <Pressable style={styles.button} onPress={e => setShowAdmin(!showAdmin)}>
-                <Text style={[styles.text, { color: 'white' }]}>Admin {showAdmin ? 'true' : 'false'}</Text>
-              </Pressable>
-              {
-                showAdmin &&
-                <>
-                  <View style={styles.viewRow}>
-                    <View style={styles.viewColumn}>
-                      <DropDownPicker
-                        open={open}
-                        value={impersonatedUser}
-                        items={items()}
-                        setOpen={setOpen}
-                        setValue={setImpersonatedUser}
-                      />
-                    </View>
-                    <View style={styles.viewColumn}>
-                      <Pressable style={styles.button} onPress={e => setImpersonatedUser(null)}>
-                        <Text style={[styles.text, { color: 'white' }]}>Clear</Text>
-                      </Pressable>
-                    </View>
-                    <View style={styles.viewColumn}>
-                      <Pressable style={styles.button} onPress={e => setIgnoreLocked(!ignoreLocked)}>
-                        <Text style={[styles.text, { color: 'white' }]}>{ignoreLocked ? "Lock" : "Unlock"}</Text>
-                      </Pressable>
-                    </View>
-                  </View>
-                </>
-              }
-            </View>
-          </View>
-        }
-      </View>
-    </View>
+    <Container>
+      <WeekSelector week={week} setWeek={handleWeekChange} />
+      <PicksTable week={week} userId={userId()} ignoreLocked={ignoreLocked} />
+      {
+        UserData.admin &&
+        <Container>
+          <Pressable style={styles.button} onPress={e => setShowAdmin(!showAdmin)}>
+            <Text style={[styles.text, { color: 'white' }]}>Admin {showAdmin ? 'true' : 'false'}</Text>
+          </Pressable>
+          {
+            showAdmin &&
+            <>
+              <Row>
+                <Column>
+                  <DropDownPicker
+                    open={open}
+                    value={impersonatedUser}
+                    items={items()}
+                    setOpen={setOpen}
+                    setValue={setImpersonatedUser}
+                  />
+                </Column>
+                <Column>
+                  <Pressable style={styles.button} onPress={e => setImpersonatedUser(null)}>
+                    <Text style={[styles.text, { color: 'white' }]}>Clear</Text>
+                  </Pressable>
+                </Column>
+                <Column>
+                  <Pressable style={styles.button} onPress={e => setIgnoreLocked(!ignoreLocked)}>
+                    <Text style={[styles.text, { color: 'white' }]}>{ignoreLocked ? "Lock" : "Unlock"}</Text>
+                  </Pressable>
+                </Column>
+              </Row>
+            </>
+          }
+        </Container>
+      }
+    </Container>
   )
 
 

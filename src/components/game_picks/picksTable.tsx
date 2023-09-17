@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 import { useEffect, useState } from 'react';
-import { Pressable, PressableProps, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, PressableProps, Text, TouchableOpacity } from 'react-native';
 import DraggableFlatList, { DragEndParams, RenderItemParams, ScaleDecorator } from 'react-native-draggable-flatlist';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -10,6 +10,8 @@ import { useUpdateGamePick } from '../../hooks/game_picks/useUpdateGamePick';
 import { useUpdateGamePickOrder } from '../../hooks/game_picks/useUpdateGamePickOrder';
 import { Blue, BlueGrey } from '../../utils/colors';
 import { styles } from '../../utils/styles';
+import Column from '../layouts/column';
+import Row from '../layouts/row';
 
 export interface PicksTableProps {
   userId: number;
@@ -147,7 +149,6 @@ export default function PicksTable(props: PicksTableProps) {
           activeOpacity={1}
           onLongPress={drag}
           disabled={isActive || disableRow(item.game)}
-
           style={[
             {
               flex: 1,
@@ -160,7 +161,7 @@ export default function PicksTable(props: PicksTableProps) {
             },
           ]}
         >
-          <View style={styles.viewRow}>
+          <Row>
             <Text style={[styles.text, { flex: 1, color: textColor(item) }]}>{item.amount}</Text>
             <Pressable {...buttonProps(item, false)} onPress={e => handleTeamPick(item.id, false)}>
               <Text style={[styles.text, { color: textColor(item) }]}>{item.game.awayTeam.name}</Text>
@@ -169,10 +170,10 @@ export default function PicksTable(props: PicksTableProps) {
             <Pressable {...buttonProps(item, true)} onPress={e => handleTeamPick(item.id, true)}>
               <Text style={[styles.text, { color: textColor(item) }]}>{item.game.homeTeam.name}</Text>
             </Pressable>
-            <View style={[styles.viewColumn, { flex: 1 }]}>
+            <Column>
               {icon(item)}
-            </View>
-          </View>
+            </Column>
+          </Row>
         </TouchableOpacity>
       </ScaleDecorator>
     );
@@ -180,9 +181,9 @@ export default function PicksTable(props: PicksTableProps) {
 
 
   return (
-    <View style={[styles.viewRow, { flex: 4 }]}>
-      <View style={[styles.viewColumn]}>
-        <View style={styles.viewRow}>
+    <Row style={{ flex: 6 }}>
+      <Column>
+        <Row>
           <DraggableFlatList
             data={picks}
             onDragEnd={reorder}
@@ -191,8 +192,8 @@ export default function PicksTable(props: PicksTableProps) {
             style={{ flex: 1 }}
             containerStyle={{ flex: 1, flexDirection: 'column', borderWidth: 2, padding: 0 }}
           />
-        </View>
-      </View>
-    </View>
+        </Row>
+      </Column>
+    </Row>
   )
 }

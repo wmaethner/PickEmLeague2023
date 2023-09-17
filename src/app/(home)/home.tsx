@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
+import { Pressable, StyleProp, Text, ViewStyle } from 'react-native';
 import { GameSchema, SummarySchema } from '../../apis';
 import AppBackground from '../../components/appBackground';
 import PlayerPicks from '../../components/game_picks/playerPicks';
+import Column from '../../components/layouts/column';
+import Container from '../../components/layouts/container';
+import Row from '../../components/layouts/row';
 import Loading from '../../components/loading';
 import Scoreboard from '../../components/scoreboard';
 import WeekSelector from '../../components/weekSelector';
@@ -40,7 +43,7 @@ export default function Home() {
 
 
   const buttonStyle = (tab: number): StyleProp<ViewStyle> => {
-    return [styles.button, {backgroundColor: selectedTab == tab ? Blue.Blue500 : 'gray'}];
+    return [styles.button, { backgroundColor: selectedTab == tab ? Blue.Blue500 : 'gray' }];
   }
 
   const selectedTabView = () => {
@@ -55,24 +58,22 @@ export default function Home() {
   }
 
   const homeView = () => (
-    <View style={styles.viewRow}>
-      <View style={styles.viewColumn}>
-        <WeekSelector week={week} setWeek={setWeek} />
-        <View style={styles.viewRow}>
-          <View style={styles.viewColumn}>
-            <Pressable style={buttonStyle(0)} onPress={(() => setTab(0))}>
-              <Text style={styles.text}>Scoreboard</Text>
-            </Pressable>
-          </View>
-          <View style={styles.viewColumn}>
-            <Pressable style={buttonStyle(1)} onPress={(() => setTab(1))}>
-              <Text style={styles.text}>Player Picks</Text>
-            </Pressable>
-          </View>
-        </View>
-        {selectedTabView()}
-      </View>
-    </View>
+    <Container>
+      <WeekSelector week={week} setWeek={setWeek} />
+      <Row>
+        <Column>
+          <Pressable style={buttonStyle(0)} onPress={(() => setTab(0))}>
+            <Text style={styles.text}>Scoreboard</Text>
+          </Pressable>
+        </Column>
+        <Column>
+          <Pressable style={buttonStyle(1)} onPress={(() => setTab(1))}>
+            <Text style={styles.text}>Player Picks</Text>
+          </Pressable>
+        </Column>
+      </Row>
+      {selectedTabView()}
+    </Container>
   )
 
   return (

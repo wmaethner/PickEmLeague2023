@@ -1,5 +1,7 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text } from "react-native";
 import { styles } from "../utils/styles";
+import Column from "./layouts/column";
+import Row from "./layouts/row";
 
 
 export interface WeekSelectorProps {
@@ -21,20 +23,20 @@ export default function WeekSelector(props: WeekSelectorProps) {
   }
 
   return (
-    <View style={[styles.viewRow]}>
-      <View style={styles.viewColumn}>
+    <Row>
+      <Column>
         <Pressable style={styles.button} onPress={e => handleWeekChange(-1)}>
           <Text style={styles.text}>&lt;</Text>
         </Pressable>
-      </View>
-      <View style={styles.viewColumn}>
+      </Column>
+      <Column>
         <Text style={styles.title}>Week {props.week}</Text>
-      </View>
-      <View style={styles.viewColumn}>
+      </Column>
+      <Column>
         <Pressable style={styles.button} onPress={e => handleWeekChange(1)}>
           <Text style={styles.text}>&gt;</Text>
         </Pressable>
-      </View>
-    </View>
+      </Column>
+    </Row>
   )
 } 

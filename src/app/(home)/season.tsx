@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
 import { GameSchema, SummarySchema } from '../../apis';
 import AppBackground from '../../components/appBackground';
+import Container from '../../components/layouts/container';
 import Scoreboard from '../../components/scoreboard';
 import { useGetAllGames } from '../../hooks/games/useGetAllGames';
 import { useGetSeasonSummaries } from '../../hooks/useGetSeasonSummaries';
-import { styles } from '../../utils/styles';
 
 
 export default function Home() {
@@ -26,11 +25,9 @@ export default function Home() {
 
   return (
     <AppBackground>
-      <View style={styles.viewRow}>
-        <View style={styles.viewColumn}>
-          <Scoreboard summaries={summaries} games={games} />
-        </View>
-      </View>
+      <Container>
+        <Scoreboard summaries={summaries} games={games} />
+      </Container>
     </AppBackground>
   )
 }
