@@ -74,7 +74,6 @@ export function AuthProvider(props) {
       const username = await SecureStore.getItemAsync('username');
       const password = await SecureStore.getItemAsync('password');
       const saveCredentials = await SecureStore.getItemAsync('saveCredentials');
-      console.log(`Getting credentials ${username} - ${password}`);
       setUsername(username ? username : '');
       setPassword(password ? password : '');
       setSaveCredentials(saveCredentials ? true : false);

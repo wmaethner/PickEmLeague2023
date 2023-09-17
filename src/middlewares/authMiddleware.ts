@@ -5,7 +5,6 @@ export class AuthMiddleware implements Middleware {
   
 
   public async pre(context: ResponseContext): Promise<FetchParams | void> {
-    // console.log(context.url);
     return {
       url: context.url,
       init: {
@@ -27,7 +26,6 @@ export class AuthMiddleware implements Middleware {
       const token = await storage.load({ key: 'bearerToken'});
       return `Bearer ${token}`;
     } catch (err) {
-      console.log(`Acquire token error ${err}`);
       return '';
     }
   }

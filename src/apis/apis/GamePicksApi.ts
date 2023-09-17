@@ -155,7 +155,7 @@ export class GamePicksApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/game_picks/{week}`.replace(`{${"week"}}`, encodeURIComponent(String(requestParameters.week))),
+            path: `/game_picks/by_week/{week}`.replace(`{${"week"}}`, encodeURIComponent(String(requestParameters.week))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

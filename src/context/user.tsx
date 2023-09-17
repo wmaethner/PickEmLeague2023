@@ -21,7 +21,6 @@ export function UserProvider(props) {
   
   const setCurrentUser = async () => {
     const data = (await useGetCurrentUser()).data;
-    console.log(data);
     setUser(data);
   }
 

@@ -13,6 +13,7 @@ import { useGetMisc } from '../hooks/useGetMisc';
 import { BlueGrey } from "../utils/colors";
 import { styles } from "../utils/styles";
 import { versionUpdateAvailable } from '../utils/version_update_available';
+import UserInfoModal from './userInfoModal';
 import VersionModal from "./versionModal";
 
 const { Popover } = renderers
@@ -20,6 +21,7 @@ const { Popover } = renderers
 export default function Header() {
   const { UserData } = useUser();
   const [versionModalOpen, setVersionModalOpen] = useState(false);
+  const [userModalOpen, setUserModalOpen] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState(false);
 
   useEffect(() => {
@@ -53,6 +55,9 @@ export default function Header() {
               />
             }
           </MenuOption>
+          <MenuOption style={{ padding: 10 }} onSelect={() => setUserModalOpen(true)}>
+            <Text>User Info</Text>
+          </MenuOption>
         </MenuOptions>
         {
           showBadge() &&
@@ -64,6 +69,7 @@ export default function Header() {
         }
       </Menu>
       <VersionModal open={versionModalOpen} close={() => setVersionModalOpen(false)} />
+      <UserInfoModal open={userModalOpen} close={() => setUserModalOpen(false)} user={UserData} />
     </View>
   )
 }

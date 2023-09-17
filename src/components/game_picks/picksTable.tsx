@@ -4,12 +4,12 @@ import { Pressable, PressableProps, Text, TouchableOpacity, View } from 'react-n
 import DraggableFlatList, { DragEndParams, RenderItemParams, ScaleDecorator } from 'react-native-draggable-flatlist';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { GamePickSchema, GameSchema } from '../apis';
-import { useGetGamePicks } from '../hooks/useGetGamePicks';
-import { useUpdateGamePick } from '../hooks/useUpdateGamePick';
-import { useUpdateGamePickOrder } from '../hooks/useUpdateGamePickOrder';
-import { Blue, BlueGrey } from '../utils/colors';
-import { styles } from '../utils/styles';
+import { GamePickSchema, GameSchema } from '../../apis';
+import { useGetGamePicks } from '../../hooks/game_picks/useGetGamePicks';
+import { useUpdateGamePick } from '../../hooks/game_picks/useUpdateGamePick';
+import { useUpdateGamePickOrder } from '../../hooks/game_picks/useUpdateGamePickOrder';
+import { Blue, BlueGrey } from '../../utils/colors';
+import { styles } from '../../utils/styles';
 
 export interface PicksTableProps {
   userId: number;

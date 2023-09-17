@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Dimensions, ScrollView, Text, View } from 'react-native';
-import { Row, Table } from 'react-native-reanimated-table';
+import { Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
 import { GameSchema, SummarySchema } from '../../apis';
 import AppBackground from '../../components/appBackground';
+import PlayerPicks from '../../components/game_picks/playerPicks';
+import Loading from '../../components/loading';
+import Scoreboard from '../../components/scoreboard';
 import WeekSelector from '../../components/weekSelector';
 import { useGetGames } from '../../hooks/games/useGetGames';
 import { useGetMisc } from '../../hooks/useGetMisc';
 import { useGetWeekSummaries } from '../../hooks/useGetWeekSummaries';
-import { BlueGrey } from '../../utils/colors';
+import { Blue } from '../../utils/colors';
 import { styles } from '../../utils/styles';
 
 
@@ -16,6 +18,7 @@ export default function Home() {
   const [summaries, setSummaries] = useState<SummarySchema[]>([]);
   const [week, setWeek] = useState(1);
   const [games, setGames] = useState<GameSchema[]>([]);
+  const [selectedTab, setTab] = useState(0);
 
   useEffect(() => {
     async function GetWeek() {
@@ -35,61 +38,39 @@ export default function Home() {
     GetData();
   }, [week])
 
-  const header = () => [
-    '', 'Username', 'Score', 'Picks Correct'
-  ]
 
-  const widths = () => {
-    const windowWidth = Dimensions.get('window').width;
-    return [windowWidth * 0.1, windowWidth * 0.5, windowWidth * 0.2, windowWidth * 0.2]
+  const buttonStyle = (tab: number): StyleProp<ViewStyle> => {
+    return [styles.button, {backgroundColor: selectedTab == tab ? Blue.Blue500 : 'gray'}];
   }
 
-  const gamesPlayed = () => {
-    return games.filter(g => g.result !== 1).length;
+  const selectedTabView = () => {
+    switch (selectedTab) {
+      case 0:
+        return <Scoreboard summaries={summaries} games={games} />
+      case 1:
+        return <PlayerPicks week={week} />
+      default:
+        break;
+    }
   }
-
-  const mapSummary = (summary: SummarySchema, index: number) =>
-    [
-      index + 1,
-      summary.user.username,
-      summary.score,
-      `${summary.correctPicks}/${gamesPlayed()}`
-    ]
-
-  const loadingView = () => (
-    <View style={styles.viewRow}>
-      <View style={styles.viewColumn}>
-        <View style={{ backgroundColor: BlueGrey.BlueGrey500, padding: 10, borderRadius: 10, alignItems: 'center' }}>
-          <Text style={styles.title}>LOADING...</Text>
-        </View>
-      </View>
-    </View>
-  )
 
   const homeView = () => (
     <View style={styles.viewRow}>
       <View style={styles.viewColumn}>
         <WeekSelector week={week} setWeek={setWeek} />
-        <View style={[styles.viewRow, { flex: 4, alignItems: 'flex-start' }]}>
-          <View style={{ backgroundColor: BlueGrey.BlueGrey50 }}>
-            <Table borderStyle={{ borderWidth: 1, borderColor: 'black' }}>
-              <Row data={header()} widthArr={widths()} style={{ height: 40, backgroundColor: BlueGrey.BlueGrey600 }} textStyle={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }} />
-            </Table>
-            <ScrollView style={{ marginTop: -1, marginBottom: 0 }}>
-              <Table borderStyle={{ borderWidth: 1, borderColor: 'black' }}>
-                {summaries.map((summary, index) => (
-                  <Row
-                    key={index}
-                    data={mapSummary(summary, index)}
-                    widthArr={widths()}
-                    style={{ height: 30 }}
-                    textStyle={{ color: 'black', textAlign: 'center' }}
-                  />
-                ))}
-              </Table>
-            </ScrollView>
+        <View style={styles.viewRow}>
+          <View style={styles.viewColumn}>
+            <Pressable style={buttonStyle(0)} onPress={(() => setTab(0))}>
+              <Text style={styles.text}>Scoreboard</Text>
+            </Pressable>
+          </View>
+          <View style={styles.viewColumn}>
+            <Pressable style={buttonStyle(1)} onPress={(() => setTab(1))}>
+              <Text style={styles.text}>Player Picks</Text>
+            </Pressable>
           </View>
         </View>
+        {selectedTabView()}
       </View>
     </View>
   )
@@ -98,7 +79,7 @@ export default function Home() {
     <AppBackground>
       {
         loading ?
-          loadingView() : homeView()
+          <Loading /> : homeView()
       }
     </AppBackground>
   )

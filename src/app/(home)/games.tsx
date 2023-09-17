@@ -34,6 +34,7 @@ export default function Gamges() {
 
   const handleWeekChange = (week: number) => {
     setWeek(week);
+    setChanged(true);
   }
 
   const buttonProps = (game: GameSchema, home: boolean): PressableProps => {

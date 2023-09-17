@@ -3,12 +3,12 @@ import { Pressable, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { UserSchema } from '../../apis';
 import AppBackground from '../../components/appBackground';
-import PicksTable from '../../components/picksTable';
+import PicksTable from '../../components/game_picks/picksTable';
+import Loading from '../../components/loading';
 import WeekSelector from '../../components/weekSelector';
 import { useUser } from '../../context/user';
 import { useGetMisc } from '../../hooks/useGetMisc';
 import { useGetUsers } from '../../hooks/useGetUsers';
-import { BlueGrey } from '../../utils/colors';
 import { styles } from '../../utils/styles';
 
 export default function Picks() {
@@ -50,16 +50,6 @@ export default function Picks() {
       }
     ))
   }
-
-  const loadingView = () => (
-    <View style={styles.viewRow}>
-      <View style={styles.viewColumn}>
-        <View style={{ backgroundColor: BlueGrey.BlueGrey500, padding: 10, borderRadius: 10, alignItems: 'center' }}>
-          <Text style={styles.title}>LOADING...</Text>
-        </View>
-      </View>
-    </View>
-  )
 
   const picksView = () => (
     <View style={styles.viewRow}>
@@ -111,7 +101,7 @@ export default function Picks() {
     <AppBackground>
       {
         loading ?
-          loadingView() : picksView()
+          <Loading /> : picksView()
       }
     </AppBackground>
   )
