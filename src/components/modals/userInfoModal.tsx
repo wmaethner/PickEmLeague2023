@@ -1,6 +1,6 @@
 import { Text } from "react-native";
-import { UserSchema } from "../apis";
-import { styles } from "../utils/styles";
+import { UserSchema } from "../../apis";
+import { styles } from "../../utils/styles";
 import ModalWrapper from "./modalWrapper";
 
 export interface UserInfoModalProps {
@@ -14,12 +14,12 @@ export default function UserInfoModal(props: UserInfoModalProps) {
     <ModalWrapper
       open={props.open}
       close={props.close}
+      title={props.user.username}
     >
       {
         props.user &&
         <>
-          <Text style={styles.title}>{props.user.username}</Text>
-          <Text style={styles.text}>{props.user.firstName} {props.user.lastName}</Text>
+          <Text style={styles.text}>Name: {props.user.firstName} {props.user.lastName}</Text>
         </>
       }
     </ModalWrapper>

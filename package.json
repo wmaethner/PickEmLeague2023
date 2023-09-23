@@ -60,7 +60,10 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-table-component": "^1.2.2",
     "replace-in-file": "^7.0.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "expo-notifications": "~0.20.1",
+    "expo-device": "~5.4.0",
+    "expo-dev-client": "~2.4.10"
   },
   "devDependencies": {
     "@babel/core": "^7.22.11",

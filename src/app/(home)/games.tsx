@@ -7,6 +7,7 @@ import Row from '../../components/layouts/row';
 import WeekSelector from '../../components/weekSelector';
 import { useGetGames } from '../../hooks/games/useGetGames';
 import { useUpdateGame } from '../../hooks/games/useUpdateGame';
+import { useGetMisc } from '../../hooks/useGetMisc';
 import { Blue } from '../../utils/colors';
 import { styles } from '../../utils/styles';
 
@@ -15,6 +16,15 @@ export default function Games() {
   const [week, setWeek] = useState(1);
   const [games, setGames] = useState<GameSchema[]>([]);
   const [changed, setChanged] = useState(true);
+
+  useEffect(() => {
+    async function GetWeek() {
+      setWeek((await useGetMisc()).currentWeek);
+      setChanged(true);
+    }
+
+    GetWeek();
+  }, [])
 
   useEffect(() => {
     async function GetGames() {

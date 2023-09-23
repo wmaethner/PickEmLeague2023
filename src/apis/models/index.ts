@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './AuthModel';
 export * from './AuthSchema';
+export * from './EntrySchema';
 export * from './GameListModel';
 export * from './GameModel';
 export * from './GamePickListModel';
@@ -12,6 +13,11 @@ export * from './MiscModel';
 export * from './MiscSchema';
 export * from './PickStatusSchema';
 export * from './PickStatusesModel';
+export * from './ReadIds';
+export * from './ReadIdsModel';
+export * from './ReleaseNotesListModel';
+export * from './ReleaseNotesModel';
+export * from './ReleaseNotesSchema';
 export * from './SummariesModel';
 export * from './SummarySchema';
 export * from './TeamListModel';

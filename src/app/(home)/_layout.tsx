@@ -58,6 +58,7 @@ export default function Layout() {
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="sort-bool-descending-variant" color={color} size={size} />
             ),
+            tabBarBadge: false ? "!" : null
           }}
         />
         <Tabs.Screen

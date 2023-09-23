@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Pressable, Text } from "react-native";
 import { UserSchema } from "../apis";
 import { styles } from "../utils/styles";
-import UserInfoModal from "./userInfoModal";
+import UserInfoModal from "./modals/userInfoModal";
 
 export interface UserInfoLinkProps {
   user: UserSchema;

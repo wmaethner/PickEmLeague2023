@@ -3,7 +3,7 @@ import { GamePickSchema, GameSchema } from "../../apis";
 import { styles } from "../../utils/styles";
 import Column from "../layouts/column";
 import Row from "../layouts/row";
-import ModalWrapper from "../modalWrapper";
+import ModalWrapper from "../modals/modalWrapper";
 import UserInfoLink from "../userInfoLink";
 
 export interface PlayerPicksModalProps {

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Platform, Text } from "react-native";
-import { VersionSchema } from "../apis";
-import { useGetMisc } from "../hooks/useGetMisc";
-import { styles } from "../utils/styles";
-import { versionUpdateAvailable } from "../utils/version_update_available";
-import Row from "./layouts/row";
+import { VersionSchema } from "../../apis";
+import { useGetMisc } from "../../hooks/useGetMisc";
+import { styles } from "../../utils/styles";
+import { versionUpdateAvailable } from "../../utils/version_update_available";
+import Row from "../layouts/row";
 import ModalWrapper from "./modalWrapper";
 
 export interface VersionModalProps {
@@ -38,6 +38,7 @@ export default function VersionModal(props: VersionModalProps) {
     <ModalWrapper
       open={props.open}
       close={props.close}
+      title="Version Info"
     >
       {
         updateAvailable &&
