@@ -13,6 +13,8 @@ export * from './MiscModel';
 export * from './MiscSchema';
 export * from './PickStatusSchema';
 export * from './PickStatusesModel';
+export * from './PushNotification';
+export * from './PushNotificationToken';
 export * from './ReadIds';
 export * from './ReadIdsModel';
 export * from './ReleaseNotesListModel';

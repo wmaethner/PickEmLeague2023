@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import * as Notifications from 'expo-notifications';
+import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleProp, Text, ViewStyle } from 'react-native';
 import { GameSchema, SummarySchema } from '../../apis';
 import AppBackground from '../../components/appBackground';
@@ -12,7 +13,9 @@ import WeekSelector from '../../components/weekSelector';
 import { useGetGames } from '../../hooks/games/useGetGames';
 import { useGetMisc } from '../../hooks/useGetMisc';
 import { useGetWeekSummaries } from '../../hooks/useGetWeekSummaries';
+import { useSetPushToken } from '../../hooks/useSetPushToken';
 import { Blue } from '../../utils/colors';
+import { registerForPushNotificationsAsync } from '../../utils/push_notifications';
 import { styles } from '../../utils/styles';
 
 
@@ -22,6 +25,10 @@ export default function Home() {
   const [week, setWeek] = useState(1);
   const [games, setGames] = useState<GameSchema[]>([]);
   const [selectedTab, setTab] = useState(0);
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState<Notifications.Notification>(null);
+  const notificationListener = useRef<Notifications.Subscription>();
+  const responseListener = useRef<Notifications.Subscription>();
 
   useEffect(() => {
     async function GetWeek() {
@@ -30,6 +37,24 @@ export default function Home() {
     }
 
     GetWeek();
+
+    registerForPushNotificationsAsync().then(async token => {
+      await useSetPushToken(token);
+      setExpoPushToken(token)
+    });
+
+    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+      setNotification(notification)
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      // console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, [])
 
   useEffect(() => {

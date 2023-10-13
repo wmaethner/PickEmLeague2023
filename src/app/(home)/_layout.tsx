@@ -1,4 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { Tabs } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
@@ -19,6 +20,14 @@ export default function Layout() {
     }
     GetStarted();
   }, [])
+
+  const picksTabBadgeProps = (): BottomTabNavigationOptions => {
+    if (true) {
+      // return { tabBarBadge: '!', tabBarBadgeStyle: { backgroundColor: 'orange' } };
+      return { tabBarBadge: null, tabBarBadgeStyle: { backgroundColor: 'orange' } };
+    }
+    // return { tabBarBadge: '!', tabBarBadgeStyle: { backgroundColor: 'red' } };
+  }
 
   // TODO: Add admin tabs (edit games)
   // TODO: Add user profile page/tab
@@ -58,7 +67,7 @@ export default function Layout() {
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="sort-bool-descending-variant" color={color} size={size} />
             ),
-            tabBarBadge: false ? "!" : null
+            ...picksTabBadgeProps()
           }}
         />
         <Tabs.Screen

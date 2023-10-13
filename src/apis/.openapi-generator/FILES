@@ -3,7 +3,9 @@ apis/AuthApi.ts
 apis/GamePicksApi.ts
 apis/GamesApi.ts
 apis/MiscApi.ts
+apis/PushNotificationsApi.ts
 apis/ReleaseNotesApi.ts
+apis/SchedulerApi.ts
 apis/SummariesApi.ts
 apis/TeamsApi.ts
 apis/UsersApi.ts
@@ -22,6 +24,8 @@ models/MiscModel.ts
 models/MiscSchema.ts
 models/PickStatusSchema.ts
 models/PickStatusesModel.ts
+models/PushNotification.ts
+models/PushNotificationToken.ts
 models/ReadIds.ts
 models/ReadIdsModel.ts
 models/ReleaseNotesListModel.ts
