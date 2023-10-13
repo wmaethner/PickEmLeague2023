@@ -11,7 +11,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export async function registerForPushNotificationsAsync() {
+export async function registerForPushNotificationsAsync(): Promise<Notifications.ExpoPushToken> {
   let token;
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();

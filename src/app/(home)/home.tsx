@@ -39,8 +39,8 @@ export default function Home() {
     GetWeek();
 
     registerForPushNotificationsAsync().then(async token => {
-      await useSetPushToken(token);
-      setExpoPushToken(token)
+      await useSetPushToken(token.data);
+      setExpoPushToken(token.data)
     });
 
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
