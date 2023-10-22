@@ -17,7 +17,7 @@
     ],
     "ios": {
       "bundleIdentifier": "pickemleague2023ios",
-      "buildNumber": "14",
+      "buildNumber": "13",
       "supportsTablet": true,
       "infoPlist": {
         "NSAppTransportSecurity": {
@@ -38,7 +38,7 @@
         "INTERNET"
       ],
       "package": "com.wmaethner.PickEmLeague2023_Mobile",
-      "versionCode": 10
+      "versionCode": 9
     },
     "web": {
       "favicon": "./assets/favicon.png"

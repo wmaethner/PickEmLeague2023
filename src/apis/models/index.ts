@@ -9,6 +9,8 @@ export * from './GamePickListModel';
 export * from './GamePickModel';
 export * from './GamePickSchema';
 export * from './GameSchema';
+export * from './MessageModel';
+export * from './MessageSchema';
 export * from './MiscModel';
 export * from './MiscSchema';
 export * from './PickStatusSchema';
