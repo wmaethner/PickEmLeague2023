@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { Tabs } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -77,6 +77,15 @@ export default function Layout() {
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="podium" color={color} size={size} />
             ),
+          }}
+        />
+        <Tabs.Screen
+          name="chat"
+          options={{
+            tabBarLabel: 'Chat',
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="message1" size={size} color={color} />
+            )
           }}
         />
         <Tabs.Screen

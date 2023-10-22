@@ -23,6 +23,10 @@ export interface GetJobsRequest {
     id: number;
 }
 
+export interface PostJobDetailsRequest {
+    id: string;
+}
+
 export interface PostJobsRequest {
     id: number;
 }
@@ -107,6 +111,33 @@ export class SchedulerApi extends runtime.BaseAPI {
      */
     async getJobs(requestParameters: GetJobsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getJobsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async postJobDetailsRaw(requestParameters: PostJobDetailsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling postJobDetails.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/scheduler/job/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async postJobDetails(requestParameters: PostJobDetailsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postJobDetailsRaw(requestParameters, initOverrides);
     }
 
     /**

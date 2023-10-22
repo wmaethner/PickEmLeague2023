@@ -3,6 +3,7 @@
 export * from './AuthApi';
 export * from './GamePicksApi';
 export * from './GamesApi';
+export * from './MessagesApi';
 export * from './MiscApi';
 export * from './PushNotificationsApi';
 export * from './ReleaseNotesApi';
